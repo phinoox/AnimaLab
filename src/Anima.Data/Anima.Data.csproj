@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Unique metadata for this project -->
+    <Description>Data access layer for GaDeMa using Entity Framework Core</Description>
+    <Product>Anima.Data</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Project Reference -->
+    <ProjectReference Include="../Anima.Core/Anima.Core.csproj" />
+
+    <!-- Data-specific dependencies (Versions managed by Directory.Build.props) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+
+</Project>
