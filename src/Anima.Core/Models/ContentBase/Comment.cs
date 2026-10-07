@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
  /// Represents a user-provided comment attached to a specific content item or entity.
  /// </summary>
  [ModelDependency(typeof(ContentMetaInfo))]
-public class Comment
+public class Comment : EntityBase
 {
     /// <summary>
     /// The ID of the target entity (e.g., a Scene or Character) this comment belongs to.
@@ -15,12 +15,6 @@ public class Comment
     /// </summary>
     [Required]
     public Guid TargetId { get; set; }
-
-    /// <summary>
-    /// The unique identifier for this comment, which is also the ID of the target entity (The Soul).
-    /// </summary>
-    [Key]
-    public Guid Id { get; init; }
     
     /// <summary>
     /// Gets or sets the identifier of the user who authored this comment.

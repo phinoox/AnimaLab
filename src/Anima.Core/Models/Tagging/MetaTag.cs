@@ -34,6 +34,6 @@ public class MetaTag
     /// <summary>
     /// A unique, URL-friendly slug derived from the tag's name.
     /// </summary>
-        [Required, MaxLength(128), Column("slug")]
-        public string Slug { get; set; } = "";
+    [Required, MaxLength(128), Column("slug")]
+    public string Slug { get; set; } = "";
 }

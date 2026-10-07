@@ -1,6 +1,7 @@
+using Anima.Core.Models.ContentBase;
 using Anima.Core.Models.Tagging;
 
-namespace Anima.Core.Models.ContentBase;
+namespace Anima.Core.Models.Tagging;
 
 /// <summary>
 /// Represents a junction between a piece of content and its associated descriptive tags.

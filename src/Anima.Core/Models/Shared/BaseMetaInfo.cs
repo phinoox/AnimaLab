@@ -20,6 +20,9 @@ public abstract class BaseMetaInfo
     [Key]
     public Guid Id { get; init; } = Guid.NewGuid();
 
+    [Required]
+    public Guid CreatedByUserId { get; init; }
+
     /// <summary>
     /// Gets or sets the primary display name of the entity.
     /// Updating this property automatically regenerates the associated slug.

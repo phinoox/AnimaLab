@@ -5,25 +5,9 @@ namespace Anima.Core.Models.ContentBase;
 /// Used for referencing external resources such as GDD documents, art inspirations, or research material.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class ExternalReference
+public class ExternalReference  : MetaEntity<ContentMetaInfo>
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this external reference.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-    
-    // --- Identity Anchor (The "Soul") ---
-    /// <summary>
-    /// Gets or sets the unique identifier of the associated content item.
-    /// </summary>
-    [Required]
-    public Guid MetaInfoId { get; set; }
-    /// <summary>
-    /// Gets or sets the associated content meta information entity.
-    /// </summary>
-    [ForeignKey("MetaInfoId")]
-    public virtual ContentMetaInfo ContentMetaInfo { get; set; } = null!;
-
+   
     // --- Domain Properties (The "Body") ---
     /// <summary>
     /// Gets or sets the type of reference (e.g., Document, Image, Video).

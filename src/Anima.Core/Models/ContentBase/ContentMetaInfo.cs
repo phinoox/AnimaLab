@@ -1,4 +1,5 @@
 using Anima.Core.Models.Projects;
+using Anima.Core.Models.Tagging;
 using Anima.Core.Models.Versioning;
 
 namespace Anima.Core.Models.ContentBase;
@@ -14,7 +15,7 @@ public class ContentMetaInfo : BaseMetaInfo
     public Guid? ProjectId { get; init; }
 
     [ForeignKey("ProjectId")]
-    public virtual Project Project { get; set; }
+    public virtual Project Project { get; set; } = null!; 
 
     
     [Required]
@@ -29,12 +30,11 @@ public class ContentMetaInfo : BaseMetaInfo
     [MaxLength(4096)]
     public string? References { get; set; }
 
-    public Guid CreatedByUserId { get; init; }
-
+    
     // Collection navigation properties
     public virtual ICollection<ContentVersionLog> VersionLogs { get; set; } = new List<ContentVersionLog>();
     public virtual ICollection<AssetLink> AssetLinks { get; set; } = new List<AssetLink>();
     public virtual ICollection<MediaAttachment> MediaAttachments { get; set; } = new List<MediaAttachment>();
-    public virtual ReviewStatus ReviewStatus { get; set; }
+    public virtual ReviewStatus ReviewStatus { get; set; } = null!; 
     public virtual ICollection<ContentTagRelation> MetaInfoTagRelations { get; set; } = new List<ContentTagRelation>();
 }

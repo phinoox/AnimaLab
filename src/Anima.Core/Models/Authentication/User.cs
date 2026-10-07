@@ -6,14 +6,9 @@ namespace Anima.Core.Models.Authentication;
 /// Represents a user account within the Anima system.
 /// </summary>
 [ModelDependency(typeof(RootMarker))]
-public class User
+public class User : MetaEntity<UserMetaInfo>
 {
-    /// <summary>
-    /// The unique identifier for the user.
-    /// </summary>
-    [Key]
-    public Guid Id { get; set; }
-
+   
     /// <summary>
     /// The unique username used for authentication and identification.
     /// </summary>
@@ -25,11 +20,6 @@ public class User
     /// </summary>
     [Required, MaxLength(256), EmailAddress, Display(Name = "Email Address")]
     public string Email { get; set; } = "";
-
-    /// <summary>
-    /// The metadata attached to the user identity (Title, ShortDesc, etc.).
-    /// </summary>
-    public virtual UserMetaInfo MetaInfo { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the hashed recovery code used for account access recovery.

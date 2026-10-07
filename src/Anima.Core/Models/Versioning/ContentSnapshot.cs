@@ -7,24 +7,20 @@ namespace Anima.Core.Models.Versioning;
 /// These snapshots provide version control and are used to populate the timeline view in the UI.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class ContentSnapshot
+public class ContentSnapshot : EntityBase
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this content snapshot.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-    
+
     /// <summary>
     /// Gets or sets the identifier of the associated content item.
     /// </summary>
     [Required]
-    public Guid MetaInfoId { get; set; }
+    public Guid TargetMetaInfoId { get; set; }
     
     /// <summary>
     /// Gets or sets the associated content meta information entity.
     /// </summary>
-    [ForeignKey("MetaInfoId")]
-    public virtual ContentMetaInfo ContentMetaInfo { get; set; } = null!;
+    [ForeignKey("TargetMetaInfoId")]
+    public virtual ContentMetaInfo TargetMetaInfo { get; set; } = null!;
     /// <summary>
     /// Gets or sets an optional user-provided comment explaining the reason for this snapshot (e.g., "End of chapter 1").
     /// </summary>
@@ -53,5 +49,5 @@ public class ContentSnapshot
     /// <summary>
     /// Gets or sets the serialized JSON data representing the state of the content at the time of the snapshot.
     /// </summary>
-    public string SnapshotDataJson { get; set; }
+    public required string SnapshotDataJson { get; set; }
 }

@@ -8,14 +8,8 @@ using Anima.Core.Utils;
 /// Represents a review status for a specific piece of content.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class ReviewStatus
+public class ReviewStatus : EntityBase
 {
-    /// <summary>
-    /// The unique identifier for this review, which is also the ID of the target content item (The Soul).
-    /// </summary>
-    [Key]
-    public Guid Id { get; set; }
-
     /// <summary>
     /// The current status of the review process.
     /// </summary>

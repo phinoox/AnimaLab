@@ -4,24 +4,8 @@ namespace Anima.Core.Models.ContentBase;
 /// Links content items to game engine asset systems, facilitating tracking of exported assets.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class AssetLink
+public class AssetLink : MetaEntity<ContentMetaInfo>
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this asset link.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-
-    /// <summary>
-    /// Gets or sets the unique identifier of the associated content item.
-    /// </summary>
-    [Required, Display(Name = "Content Item")]
-    public Guid MetaInfoId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the associated content meta information entity.
-    /// </summary>
-    [ForeignKey("MetaInfoId")]
-    public virtual ContentMetaInfo ContentMetaInfo { get; set; }
     /// <summary>
     /// Gets or sets the path within the game engine's asset directory.
     /// </summary>

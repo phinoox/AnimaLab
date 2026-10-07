@@ -6,24 +6,20 @@ namespace Anima.Core.Models.Versioning;
 /// Represents a record of a specific version change for a content item, used to support rollback capabilities.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class ContentVersionLog
+public class ContentVersionLog : EntityBase
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this version log entry.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-    
+   
     /// <summary>
     /// Gets or sets the identifier of the associated content item.
     /// </summary>
     [Required]
-    public Guid MetaInfoId { get; set; }
+    public Guid TargetMetaInfoId { get; set; }
 
     /// <summary>
     /// Gets or sets the associated content meta information entity.
     /// </summary>
-    [ForeignKey("MetaInfoId")]
-    public virtual ContentMetaInfo ContentMetaInfo { get; set; }
+    [ForeignKey("TargetMetaInfoId")]
+    public virtual ContentMetaInfo TargetMetaInfo { get; set; } = null!; 
     /// <summary>
     /// Gets or sets the identifier of the user who performed this versioned change.
     /// </summary>

@@ -9,11 +9,8 @@ namespace Anima.Core.Models.Projects;
 /// Owned by a single User (CreatedBy).
 /// </summary>
 [ModelDependency(typeof(User), typeof(ProjectMetaInfo))] 
-public class Project : ISoftDeletable
+public class Project : MetaEntity<ProjectMetaInfo>,ISoftDeletable
 {
-    [Key]
-    public Guid Id { get; set; }
-
     // --- Domain Data ---
     [MaxLength(4096)]
     public string? Description { get; set; } = null!;
@@ -34,9 +31,7 @@ public class Project : ISoftDeletable
     [ForeignKey("ProjectSeriesId")]
     public virtual ProjectSeries? ProjectSeries { get; set; }
 
-    // The Id of the project is now also the FK to its MetaInfo (Vertical Unification)
-    [ForeignKey("Id")]
-    public virtual ProjectMetaInfo ProjectMetaInfo { get; set; } = null!;
+   
 
     // --- Domain Specific Metadata ---
     public bool EnableUserRegistration { get; set; } = false;

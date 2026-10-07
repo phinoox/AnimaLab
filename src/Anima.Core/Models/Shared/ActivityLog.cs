@@ -7,13 +7,9 @@ namespace Anima.Core.Models.Shared;
 /// Represents a business-level audit event within a project, used for accountability and history tracking.
 /// </summary>
 [ModelDependency(typeof(Project), typeof(User))]
-public class ActivityLog
+public class ActivityLog  : EntityBase
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this activity log entry.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-
+    
     /// <summary>
     /// Gets or sets the identifier of the project associated with this activity.
     /// </summary>

@@ -5,11 +5,9 @@ using Anima.Core.Models.Projects;
 /// Provides access credentials for a specific project context.
 /// Following Law I: This is a 1:1 extension, so Id == ProjectId.
 /// </summary>
-public class ProjectToken
+public class ProjectToken : EntityBase
 {
-    [Key]
-    public Guid Id { get; set; } // Same as ProjectId
-
+    
     [Required]
     public Guid ProjectId { get; set; }
 

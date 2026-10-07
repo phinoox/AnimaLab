@@ -5,23 +5,9 @@ namespace Anima.Core.Models.ContentBase;
 /// Supports tracking of uploaded files and their storage locations.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class MediaAttachment
+public class MediaAttachment : MetaEntity<ContentMetaInfo>
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this media attachment.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-    
-    /// <summary>
-    /// Gets or sets the unique identifier of the associated content item.
-    /// </summary>
-    [Required, Display(Name = "Content Item ID")]
-    public Guid MetaInfoId { get; set; }
-    /// <summary>
-    /// Gets or sets the associated content meta information entity.
-    /// </summary>
-    [ForeignKey("MetaInfoId")]
-    public virtual ContentMetaInfo ContentMetaInfo { get; set; }
+   
     /// <summary>
     /// Gets or sets the original name of the uploaded file.
     /// </summary>
@@ -57,5 +43,5 @@ public class MediaAttachment
     /// <summary>
     /// Gets or sets a collection of external references associated with this media attachment.
     /// </summary>
-    public ICollection<ExternalReference> ExternalReferences { get; set; }
+    public ICollection<ExternalReference> ExternalReferences { get; set; } = null!; 
 }

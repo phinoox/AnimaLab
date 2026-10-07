@@ -32,14 +32,9 @@ public enum ProjectMemberRoleEnum
 /// Represents a user's membership and associated role within a specific project.
 /// </summary>
 [ModelDependency(typeof(Project), typeof(User))]
-public class ProjectMember
+public class ProjectMember : EntityBase
 {
-    /// <summary>
-    /// Gets or sets the unique identifier for this membership record.
-    /// </summary>
-    [Key]
-    public Guid Id { get; set; }
-
+   
     /// <summary>
     /// Gets or sets the identifier of the associated project.
     /// </summary>
