@@ -1,0 +1,155 @@
+# ============================================================
+# Build & Compile Artifacts (Standard .NET)
+# ============================================================
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.xml
+*.pdb
+
+# NuGet packages cache
+packages/*
+.nuget/packages/*
+
+# ============================================================
+# Environment Files (Sensitive Data - DO NOT COMMIT!)
+# ============================================================
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+local.settings.json
+*.userprefs
+local.*.json
+
+# ============================================================
+# IDE-Specific Files (VS Code & Rider)
+# ============================================================
+.idea/
+.vscode/
+.rider/*
+.sln.lock
+.csproj.user
+.vs/*.suo
+.vs/*.user
+.vs/*.cache
+.project
+.project.lock
+*.rider
+*.rider*
+
+# ============================================================
+# Database Files (SQLite)
+# ============================================================
+*.db
+*.sqlite
+*.sqlitedb
+*.db-shm
+*.db-wal
+*.db-journal
+uploads/*
+
+# ============================================================
+# Logs & Temp Files
+# ============================================================
+*.log
+logs/
+temp/
+tmp/
+Temp/
+Temporary Files/
+*.userprefs
+*.lock
+*.lck
+*.pid
+*.tmp
+
+# ============================================================
+# Test Artifacts
+# ============================================================
+TestResults/
+coverage/
+*.coveragexml
+*.coverage
+*.{dll,exe,pdb} in test folders
+
+# ============================================================
+# Uploads & Media (Outside src/)
+# ============================================================
+uploads/**/*
+**/*.uploads/**/*
+assets/*
+resources/*
+media/*
+
+# ============================================================
+# Generated Documentation
+# ============================================================
+docs/GeneratedDocs/
+*.swagger.json
+*.swagger.yaml
+*.openapi.json
+*.openapi.yaml
+*.oas.*
+
+# ============================================================
+# Editor & Formatter Cache
+# ============================================================
+.vscode/settings.json
+.vscode/extensions.json
+.idea/indexLayout.xml
+.idea/libraries.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/caches/
+.idea/dictionaries/
+.idea/scopes/
+
+# ============================================================
+# Performance Profiles (Optional - Keep for Debug)
+# ============================================================
+*.vsprofiler
+*.performance
+*.perfdata
+*.perf.log
+
+# ============================================================
+# Docker & Container Files (Optional - Comment out if not using Docker)
+# ============================================================
+# docker-compose.override.json
+# .dockerignore (only commit production version)
+# *.dockerfile
+
+# ============================================================
+# Environment-Specific Files
+# ============================================================
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+.secrets.json
+credentials.json
+api-keys.json
+
+# ============================================================
+# Backup & Migration Artifacts
+# ============================================================
+**/*.bak
+*.old
+*.backup
+*.migrations.bak
+
+# ============================================================
+# NuGet Lock Files (Optional - Comment out if needed)
+# ============================================================
+# nuget.config.lock
+# packages.lock.json
+
+# documentation
+docs/tmp*
+scripts/output/*
+api_temp/*

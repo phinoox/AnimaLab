@@ -1,0 +1,24 @@
+{
+  "metadata": [
+    {
+      "src": [
+        "src/Gadema.Core/**/*.csproj",
+        "src/Gadema.Data/**/*.csproj",
+        "src/Gadema.Api/**/*.csproj"
+      ],
+      "dest": "api_temp"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["api_temp/**/*.yml"]
+      },
+      {
+        "files": ["docs/guides/**/*.md"]
+      }
+    ],
+    "template": ["default"],
+    "dest": "docs/api/_site"
+  }
+}
