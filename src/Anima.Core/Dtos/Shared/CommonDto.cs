@@ -64,5 +64,6 @@ public class AutosaveResponseDto
 
 public class IdentityDto
 {
-    Guid Id {get;set;}
+   public Guid Id {get;set;}
+   
 }
