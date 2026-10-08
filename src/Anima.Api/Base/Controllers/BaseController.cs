@@ -1,7 +1,8 @@
+using Anima.Api.Base.Interfaces;
 using Anima.Core.Dtos.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Controllers;
 
 /// <summary>
 /// Provides a foundational base class for all API controllers, 

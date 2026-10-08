@@ -1,6 +1,6 @@
 using Anima.Core.Dtos.Shared;
 
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Interfaces;
 
 /// <summary>
 /// Defines a contract for domain services that manage entities with associated metadata.

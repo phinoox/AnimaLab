@@ -2,7 +2,7 @@ using Anima.Api.CoreServices.Interfaces;
 using Anima.Core.Dtos.Shared;
 using Anima.Core.Models.Authentication;
 
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Services;
 
 /// <summary>
 /// Provides the foundational base class for all domain-level services in the application.

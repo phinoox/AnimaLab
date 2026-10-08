@@ -1,4 +1,4 @@
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Interfaces;
 
 using Anima.Core.Dtos.Shared;
 

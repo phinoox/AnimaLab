@@ -1,10 +1,11 @@
+using Anima.Api.Base.Interfaces;
 using Anima.Api.CoreServices.Interfaces;
 using Anima.Core.Dtos.Shared;
 using Anima.Core.Models.Projects;
 using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Services;
 
 /// <summary>
 /// Provides a specialized base class for domain services that manage entities with associated metadata.

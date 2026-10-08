@@ -1,9 +1,10 @@
 using System.Net;
+using Anima.Api.Base.Interfaces;
 using Anima.Api.CoreServices.Interfaces;
 using Anima.Core.Dtos.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Anima.Api.Base;
+namespace Anima.Api.Base.Controllers;
 
 /// <summary>
 /// Provides a foundational base class for all API controllers that manage entities with associated metadata.
