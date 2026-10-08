@@ -1,4 +1,6 @@
-namespace Anima.Core.Utils;
+using Anima.Core.Base.MetaBase;
+
+namespace Anima.Core.Base.Interfaces;
 
 /// <summary>
 /// Defines a strategy for synchronizing identity information across different systems or components.

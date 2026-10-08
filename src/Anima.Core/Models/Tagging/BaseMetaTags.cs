@@ -1,4 +1,4 @@
-namespace Anima.Core.Models.ContentBase;
+namespace Anima.Core.Models.Tagging;
 
 /// <summary>
 /// Defines fundamental tags available for all entities within the GaDeMa system.

@@ -1,4 +1,4 @@
-namespace Anima.Core.Utils;
+namespace Anima.Core.Base.Interfaces;
 
 
 /// <summary>

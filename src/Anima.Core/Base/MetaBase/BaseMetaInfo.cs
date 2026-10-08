@@ -4,7 +4,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Anima.Core.Models.Shared;
+namespace Anima.Core.Base.MetaBase;
 
 /// <summary>
 /// The universal identity anchor for all entities in the Anima universe.
@@ -16,10 +16,14 @@ public abstract class BaseMetaInfo
 
     /// <summary>
     /// Gets or sets the unique identifier for the entity.
+    /// This acts as the primary key and universal anchor for the entity's identity.
     /// </summary>
     [Key]
     public Guid Id { get; init; } = Guid.NewGuid();
 
+    /// <summary>
+    /// Gets or sets the unique identifier of the user who created this entity.
+    /// </summary>
     [Required]
     public Guid CreatedByUserId { get; init; }
 
@@ -39,17 +43,18 @@ public abstract class BaseMetaInfo
 
     /// <summary>
     /// Gets or sets a unique, URL-friendly slug for the entity.
+    /// This is used for SEO-friendly routing and identifier resolution.
     /// </summary>
     [Required, MaxLength(128), Column("slug")]
     public string Slug { get; set; } = "";
 
     /// <summary>
-    /// Gets or sets the timestamp when the entity was first created.
+    /// Gets or sets the UTC timestamp when the entity was first created.
     /// </summary>
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
     /// <summary>
-    /// Last modification timestamp.
+    /// Gets or sets the UTC timestamp when the entity was last modified.
     /// </summary>
     public DateTime LastModifiedAt { get; set; } = DateTime.UtcNow;
 
@@ -60,16 +65,20 @@ public abstract class BaseMetaInfo
     public string? ShortDesc { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the entity is publicly visible.
+    /// Gets or sets a value indicating whether the entity is accessible to the public.
     /// </summary>
     public bool IsPublic { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a collection of unique identifiers for tags associated with this entity.
+    /// This is ignored during JSON serialization to prevent circular references or deep nesting.
     /// </summary>
     [JsonIgnore]
     public List<Guid> TagIds { get; init; } = new ();
 
+    /// <summary>
+    /// Gets or sets a hint for the entity type, used during polymorphic deserialization or mapping.
+    /// </summary>
     public virtual string? TypeHint {get;set;}
 }
 

@@ -1,4 +1,6 @@
-namespace Anima.Core.Models.Authentication;
+using Anima.Core.Models.Authentication;
+
+namespace Anima.Core.Base.Interfaces;
 
 /// <summary>
 /// Provides information about the currently authenticated user within the system context.
