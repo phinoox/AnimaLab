@@ -6,6 +6,5 @@ namespace Anima.Data.Contexts;
 public partial class AppDbContext
 {
     public DbSet<MetaTag> MetaTags { get; set; }
-    public DbSet<ProjectTag> ProjectTags { get; set; }
     public DbSet<ProjectTagRelation> ProjectTagRelations { get; set; }
 }

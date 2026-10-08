@@ -1,3 +1,4 @@
+using Anima.Core.Models.Blog;
 using Anima.Core.Models.ContentBase;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,4 +12,6 @@ public partial class AppDbContext
     public DbSet<ContentTagRelation> ContentTagRelations { get; set; }
     public DbSet<ExternalReference> ExternalReferences { get; set; }
     public DbSet<MediaAttachment> MediaAttachments { get; set; }
+
+    public DbSet<BlogPost> BlogPosts { get; set; }
 }
