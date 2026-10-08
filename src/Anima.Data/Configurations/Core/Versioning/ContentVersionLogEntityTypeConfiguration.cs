@@ -18,13 +18,13 @@ public class ContentVersionLogEntityTypeConfiguration : IEntityTypeConfiguration
         builder.HasKey(e => e.Id);
 
         // Indexes for frequently filtered columns
-        builder.HasIndex(e => e.MetaInfoId);
+        builder.HasIndex(e => e.TargetMetaInfoId);
         builder.HasIndex(e => e.VersionNumber);  // Query recent versions
         
         // Navigation property: ContentMetaInfo (SetNull to preserve version history)
-        builder.HasOne(cvl => cvl.ContentMetaInfo)
+        builder.HasOne(cvl => cvl.TargetMetaInfo)
             .WithMany(ci => ci.VersionLogs)
-            .HasForeignKey(cvl => cvl.MetaInfoId)
+            .HasForeignKey(cvl => cvl.TargetMetaInfoId)
             .OnDelete(DeleteBehavior.SetNull);
 
         // Properties configuration

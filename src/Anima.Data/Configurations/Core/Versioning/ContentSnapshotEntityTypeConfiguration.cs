@@ -26,16 +26,16 @@ public class ContentSnapshotEntityTypeConfiguration : IEntityTypeConfiguration<C
         builder.HasKey(e => e.Id);
         
         // Indexes for frequently filtered columns
-        builder.HasIndex(e => e.MetaInfoId);
+        builder.HasIndex(e => e.TargetMetaInfoId);
         builder.HasIndex(e => e.VersionNumber);  // Sequential versioning for timeline
         builder.HasIndex(e => e.SnapshotType);
         builder.HasIndex(e => e.CreatedByUserId);
         builder.HasIndex(e => e.CreatedAt);  // Query recent snapshots
         
         // Navigation property: ContentMetaInfo (ContentMetaInfo)
-        builder.HasOne(cs => cs.ContentMetaInfo)
+        builder.HasOne(cs => cs.TargetMetaInfo)
             .WithMany()
-            .HasForeignKey(cs => cs.MetaInfoId)
+            .HasForeignKey(cs => cs.TargetMetaInfoId)
             .OnDelete(DeleteBehavior.Cascade);  // Cascade delete snapshot when content item deleted
         
         // Properties configuration
