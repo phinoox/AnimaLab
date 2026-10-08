@@ -14,7 +14,7 @@ public class ProjectSeriesEntityTypeConfiguration : IEntityTypeConfiguration<Pro
         // They are now managed by ProjectSeriesMetaInfo.
 
         // Relationships
-        builder.HasOne(e => e.ProjectSeriesMetaInfo)
+        builder.HasOne(e => e.MetaInfo)
                .WithOne() 
                .OnDelete(DeleteBehavior.Cascade);
 

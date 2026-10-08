@@ -16,14 +16,11 @@ public class AssetLinkEntityTypeConfiguration : IEntityTypeConfiguration<AssetLi
     {
         // Primary key (The Soul ID)
         builder.HasKey(e => e.Id);
-        
-        // Indexes for frequently filtered columns
-        builder.HasIndex(e => e.MetaInfoId);  // Filter by content item
-        
+                
         // Navigation property: ContentMetaInfo (Cascade delete)
-        builder.HasOne(al => al.ContentMetaInfo)
+        builder.HasOne(al => al.MetaInfo)
             .WithMany(ci => ci.AssetLinks)
-            .HasForeignKey(al => al.MetaInfoId)
+            .HasForeignKey(al => al.Id)
             .OnDelete(DeleteBehavior.Cascade);
         
         // Properties configuration

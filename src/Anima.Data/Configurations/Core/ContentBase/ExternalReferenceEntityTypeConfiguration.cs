@@ -22,9 +22,9 @@ public class ExternalReferenceEntityTypeConfiguration : IEntityTypeConfiguration
         builder.HasIndex(e => e.Title); // Added index for search performance
 
         // Relationship: Link to the ContentMetaInfo anchor (The "Soul")
-        builder.HasOne(er => er.ContentMetaInfo)
+        builder.HasOne(er => er.MetaInfo)
             .WithMany() 
-            .HasForeignKey(e => e.MetaInfoId)
+            .HasForeignKey(e => e.Id)
             .OnDelete(DeleteBehavior.Cascade); // If MetaInfo is deleted, reference is gone
         
         // Properties configuration

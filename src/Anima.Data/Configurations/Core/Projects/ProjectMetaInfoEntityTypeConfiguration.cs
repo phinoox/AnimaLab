@@ -18,15 +18,7 @@ public class ProjectMetaInfoEntityTypeConfiguration : IEntityTypeConfiguration<P
         builder.Property(e => e.Status).IsRequired();
         builder.Property(e => e.ViewMode).IsRequired();
 
-        // Relationship to Project (1:1)
-        // Law I: The Body's Id is its FK to the Soul. 
-        // In this case, ProjectMetaInfo is the "Body" and Project is the "Soul".
-        builder.HasOne(mi => mi.Project)
-            .WithOne(p => p.ProjectMetaInfo)
-            .HasForeignKey<ProjectMetaInfo>(mi => mi.Id) // Updated: PK/FK Unification
-            .OnDelete(DeleteBehavior.Cascade);
-
         // Indexes for performance and uniqueness
-        builder.HasIndex(e => e.ProjectId).IsUnique();
+        builder.HasIndex(e => e.Slug).IsUnique();
     }
 }

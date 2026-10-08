@@ -1,5 +1,6 @@
 using Anima.Core.Models.Blog;
 using Anima.Core.Models.ContentBase;
+using Anima.Core.Models.Tagging;
 using Microsoft.EntityFrameworkCore;
 
 namespace Anima.Data.Contexts;

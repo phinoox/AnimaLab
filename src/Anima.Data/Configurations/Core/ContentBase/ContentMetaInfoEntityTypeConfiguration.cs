@@ -24,8 +24,8 @@ public class MetaInfoEntityTypeConfiguration : IEntityTypeConfiguration<ContentM
         
         // Navigation property: MediaAttachments (SetNull to preserve attachment history)
         builder.HasMany(ci => ci.MediaAttachments)
-            .WithOne(m => m.ContentMetaInfo)
-            .HasForeignKey(m => m.MetaInfoId)
+            .WithOne(m => m.MetaInfo)
+            .HasForeignKey(m => m.Id)
             .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasOne(mi => mi.Project)

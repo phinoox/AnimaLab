@@ -19,7 +19,7 @@ public class CommentEntityTypeConfiguration : IEntityTypeConfiguration<Comment>
         
         // Indexes for frequently filtered columns
         // Note: TargetId has been unified with Id under Law I, so we index the primary identity.
-        builder.HasIndex(e => e.AuthorUserId).HasDatabaseName("IX_Comment_AuthorUserId"); 
+        builder.HasIndex(e => e.UserId).HasDatabaseName("IX_Comment_AuthorUserId"); 
         builder.HasIndex(e => e.CreatedAt);
         builder.HasIndex(e => e.ParentCommentId); 
         
