@@ -14,23 +14,42 @@ public interface IEntityMapper
     /// Maps non-null properties from the source (DTO) to the target (Entity).
     /// Respects [ReadOnly], [Sanitize], and [Validate] attributes.
     /// </summary>
-    void Map<TSource, TTarget>(TSource source, TTarget target,ProjectMemberRoleEnum teamMemberRole = ProjectMemberRoleEnum.Viewer) where TTarget : class;
+    /// <typeparam name="TSource">The type of the source DTO.</typeparam>
+    /// <typeparam name="TTarget">The type of the destination Entity.</typeparam>
+    /// <param name="source">The source object containing data.</param>
+    /// <param name="target">The target object to be updated.</param>
+    /// <param name="teamMemberRole">The role of the user performing the operation, used for permission checks via [MinRole].</param>
+    void Map<TSource, TTarget>(TSource source, TTarget target, ProjectMemberRoleEnum teamMemberRole = ProjectMemberRoleEnum.Viewer) where TTarget : class;
 }
 
+/// <summary>
+/// An implementation of <see cref="IEntityMapper"/> that uses reflection to automate the mapping process 
+/// while enforcing business rules defined by custom attributes on properties and classes.
+/// </summary>
 public class EntityMapper : IEntityMapper
 {
-    public void Map<TSource, TTarget>(TSource source, TTarget target,ProjectMemberRoleEnum teamMemberRole = ProjectMemberRoleEnum.Viewer) where TTarget : class
+    /// <summary>
+    /// Maps non-null properties from the source (DTO) to the target (Entity).
+    /// Respects [MinRole], [ReadOnly], [Sanitize], and [Validate] attributes.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the source DTO.</typeparam>
+    /// <typeparam name="TTarget">The type of the destination Entity.</typeparam>
+    /// <param name="source">The source object containing data.</param>
+    /// <param name="target">The target object to be updated.</param>
+    /// <param name="teamMemberRole">The role of the user performing the operation, used for permission checks via [MinRole].</param>
+    /// <exception cref="InvalidOperationException">Thrown when validation fails or mapping an error occurs.</exception>
+    public void Map<TSource, TTarget>(TSource source, TTarget target, ProjectMemberRoleEnum teamMemberRole = ProjectMemberRoleEnum.Viewer) where TTarget : class
     {
         if (source == null || target == null) return;
 
         var sourceType = typeof(TSource);
         var targetType = typeof(TTarget);
 
-        var minRoleAttribute =sourceType.GetCustomAttribute<MinRoleAttribute>();
-        if(minRoleAttribute != null)
+        var minRoleAttribute = sourceType.GetCustomAttribute<MinRoleAttribute>();
+        if (minRoleAttribute != null)
         {
-            if(minRoleAttribute.MinimumRole < teamMemberRole && minRoleAttribute.BypassRole != teamMemberRole)
-             return;
+            if (minRoleAttribute.MinimumRole < teamMemberRole && minRoleAttribute.BypassRole != teamMemberRole)
+                return;
         }
 
         // Get all non-null properties from the source DTO
@@ -43,9 +62,7 @@ public class EntityMapper : IEntityMapper
             // Find a matching property on the target entity by name
             var targetProp = targetType.GetProperty(sourceProp.Name, BindingFlags.Public | BindingFlags.Instance);
 
-            
-
-            if (targetProp != null && targetProp.CanWrite && IsSupportedType(targetProp) &&IsInitProperty(targetProp))
+            if (targetProp != null && targetProp.CanWrite && IsSupportedType(targetProp) && IsInitProperty(targetProp))
             {
                 var minRolePropertyAttribute = targetProp.GetCustomAttribute<MinRoleAttribute>();
                 if (minRolePropertyAttribute != null)
@@ -53,6 +70,7 @@ public class EntityMapper : IEntityMapper
                     if (minRolePropertyAttribute.MinimumRole < teamMemberRole && minRolePropertyAttribute.BypassRole != teamMemberRole)
                         return;
                 }
+
                 // 1. Check [ReadOnly] attribute on the TARGET property
                 if (targetProp.GetCustomAttribute<ReadOnlyAttribute>() != null)
                     continue;
@@ -85,19 +103,28 @@ public class EntityMapper : IEntityMapper
         }
     }
 
+    /// <summary>
+    /// Checks if a property value is null or whitespace for strings.
+    /// </summary>
     private bool IsPropertyNull(PropertyInfo prop, object obj)
     {
         var value = prop.GetValue(obj);
         return value == null || (value is string s && string.IsNullOrWhiteSpace(s));
     }
 
+    /// <summary>
+    /// Performs basic HTML stripping/sanitization on strings.
+    /// </summary>
     private string SanitizeString(string input)
     {
         if (string.IsNullOrWhiteSpace(input)) return input;
         // Basic HTML stripping/sanitization logic
-        return Regex.Replace(input, "<.*?>", string.Empty).Trim();//ToDo: replace with HTMLSanitizer
+        return Regex.Replace(input, "<.*?>", string.Empty).Trim(); // ToDo: replace with HTMLSanitizer
     }
 
+    /// <summary>
+    /// Validates the property value based on custom rules.
+    /// </summary>
     private bool IsValid(object? value, PropertyInfo prop)
     {
         // This is a placeholder for more complex validation logic (e.g., DataAnnotations or custom rules)
@@ -105,6 +132,9 @@ public class EntityMapper : IEntityMapper
         return true;
     }
 
+    /// <summary>
+    /// Determines if the property type is supported for mapping.
+    /// </summary>
     private bool IsSupportedType(PropertyInfo prop)
     {
         var targetType = prop.PropertyType;
@@ -113,9 +143,11 @@ public class EntityMapper : IEntityMapper
                                targetType == typeof(string) ||
                                targetType.IsValueType;
         return isSupportedType;
-
     }
 
+    /// <summary>
+    /// Checks if the property uses 'init' only semantics.
+    /// </summary>
     private bool IsInitProperty(PropertyInfo prop)
     {
         var setMethod = prop.SetMethod;
@@ -123,7 +155,6 @@ public class EntityMapper : IEntityMapper
 
         // Check if the setter's declaring type is IsExternalInit 
         // or if it belongs to a type that uses init-only properties logic.
-        // This is slightly complex in pure reflection but we can check for the presence of the attribute/marker.
         return setMethod.GetCustomAttributes(true).Any(a => a.GetType().Name == "IsExternalInit");
     }
 }

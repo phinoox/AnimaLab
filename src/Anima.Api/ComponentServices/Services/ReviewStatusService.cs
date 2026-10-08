@@ -9,16 +9,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Anima.Api.ComponentServices.Services;
 
+/// <summary>
+/// Provides specialized logic for managing the review status of content items.
+/// </summary>
 public class ReviewStatusService : DomainService, IReviewStatusService
 {
     private readonly AppDbContext _db;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReviewStatusService"/> class.
+    /// </summary>
+    /// <param name="db">The application database context.</param>
+    /// <param name="logger">The logger for recording service-level events and errors.</param>
+    /// <param name="coreServices">The provider for accessing cross-cutting core services.</param>
     public ReviewStatusService(AppDbContext db, ILogger<ReviewStatusService> logger, ICoreServicesProvider coreServices) 
         : base(coreServices, logger)
     {
         _db = db;
     }
 
+    /// <summary>
+    /// Updates the review status of a specific content item.
+    /// </summary>
+    /// <param name="projectId">The ID of the project containing the content.</param>
+    /// <param name="targetId">The unique identifier of the content to update.</param>
+    /// <param name="statusValue">The integer value representing the new status, cast to <see cref="ReviewStatusEnum"/>.</param>
+    /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the target ID on success, or an error response.</returns>
     public async Task<ApiResponseDto<IdentityDto>> SetStatusAsync(Guid projectId, Guid targetId, int statusValue)
     {
         // 1. Permission Check
