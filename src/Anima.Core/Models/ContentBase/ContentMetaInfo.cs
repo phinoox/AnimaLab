@@ -8,7 +8,7 @@ namespace Anima.Core.Models.ContentBase;
 /// Represents a content item (character, world, mechanic, etc.) in the game development system.
 /// </summary>
 [ModelDependency(typeof(Project))]
-public class ContentMetaInfo : ProjectScopedMetaInfo
+public class ContentMetaInfo : ProjectEntityMetaInfo
 {
     // --- Relationships & Domain Data ---
    
