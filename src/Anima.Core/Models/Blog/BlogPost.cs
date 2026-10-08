@@ -5,7 +5,7 @@ namespace Anima.Core.Models.Blog;
 /// <summary>
 /// Specific details for a Blog Page content item.
 /// </summary>
-public class BlogPost : MetaEntity<ContentMetaInfo>
+public class BlogPost : MetaEntityBase<ContentMetaInfo>
 {
   
     /// <summary>
@@ -24,4 +24,6 @@ public class BlogPost : MetaEntity<ContentMetaInfo>
     /// </summary>
     [MaxLength(10000)]
     public string? BlogText { get; set; }
+
+    
 }

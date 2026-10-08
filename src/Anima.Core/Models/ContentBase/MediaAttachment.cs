@@ -5,7 +5,7 @@ namespace Anima.Core.Models.ContentBase;
 /// Supports tracking of uploaded files and their storage locations.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class MediaAttachment : MetaEntity<ContentMetaInfo>
+public class MediaAttachment : MetaEntityBase<ContentMetaInfo>
 {
    
     /// <summary>

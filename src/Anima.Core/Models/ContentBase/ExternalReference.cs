@@ -5,7 +5,7 @@ namespace Anima.Core.Models.ContentBase;
 /// Used for referencing external resources such as GDD documents, art inspirations, or research material.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class ExternalReference  : MetaEntity<ContentMetaInfo>
+public class ExternalReference  : MetaEntityBase<ContentMetaInfo>
 {
    
     // --- Domain Properties (The "Body") ---

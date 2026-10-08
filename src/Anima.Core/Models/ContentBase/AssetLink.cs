@@ -4,7 +4,7 @@ namespace Anima.Core.Models.ContentBase;
 /// Links content items to game engine asset systems, facilitating tracking of exported assets.
 /// </summary>
 [ModelDependency(typeof(ContentMetaInfo))]
-public class AssetLink : MetaEntity<ContentMetaInfo>
+public class AssetLink : MetaEntityBase<ContentMetaInfo>
 {
     /// <summary>
     /// Gets or sets the path within the game engine's asset directory.

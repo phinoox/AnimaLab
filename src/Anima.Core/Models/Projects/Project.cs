@@ -9,7 +9,7 @@ namespace Anima.Core.Models.Projects;
 /// Owned by a single User (CreatedBy).
 /// </summary>
 [ModelDependency(typeof(User), typeof(ProjectMetaInfo))] 
-public class Project : MetaEntity<ProjectMetaInfo>,ISoftDeletable
+public class Project : MetaEntityBase<ProjectMetaInfo>,ISoftDeletable
 {
     // --- Domain Data ---
     [MaxLength(4096)]

@@ -20,7 +20,7 @@ public class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
         // --- Relationships ---
 
         // ContentMetaInfo (1:1 Relationship)
-        builder.HasOne(p => p.ProjectMetaInfo)
+        builder.HasOne(p => p.MetaInfo)
             .WithOne(mi => mi.Project)
             .HasForeignKey<ProjectMetaInfo>(mi => mi.ProjectId)
             .OnDelete(DeleteBehavior.Cascade); // If project is deleted, identity is gone

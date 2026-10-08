@@ -9,7 +9,7 @@ namespace Anima.Core.Models.Projects;
 /// A series acts as the highest-level container in the hierarchy, anchoring multiple projects.
 /// </summary>
 [ModelDependency(typeof(ProjectSeriesMetaInfo))]
-public class ProjectSeries : MetaEntity<ProjectSeriesMetaInfo>
+public class ProjectSeries : MetaEntityBase<ProjectSeriesMetaInfo>
 {
     /// <summary>
     /// Collection of projects that belong to this series.
