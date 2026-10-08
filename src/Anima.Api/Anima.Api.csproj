@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- Unique metadata for this project -->
+    <Description>ASP.NET Core Web API layer for GaDeMa</Description>
+    <StartupObject>Anima.Api.Program</StartupObject>
+    <Product>Anima.Api</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Project References -->
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" />
+    
+    <ProjectReference Include="../Anima.Data/Anima.Data.csproj" />
+    <ProjectReference Include="../Anima.Core/Anima.Core.csproj" />
+    
+    <!-- API-specific dependencies (Versions managed by Directory.Build.props) -->
+    <PackageReference Include="Microsoft.AspNetCore.Http" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+    <PackageReference Include="Microsoft.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.7" />
+    
+    <PackageReference Include="Google.Apis.Auth" />
+    <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="QuestPDF" />
+  </ItemGroup>
+
+</Project>
