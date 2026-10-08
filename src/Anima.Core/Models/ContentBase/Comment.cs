@@ -2,6 +2,12 @@ namespace Anima.Core.Models.ContentBase;
 
 using System.ComponentModel.DataAnnotations;
 
+public enum CommentSettingsEnum 
+{ 
+    Disabled = 0, 
+    Enabled = 1, 
+    Public = 2 // or perhaps 'Moderated' if you want to expand later
+}
 
  /// <summary>
  /// Represents a user-provided comment attached to a specific content item or entity.
@@ -20,7 +26,7 @@ public class Comment : EntityBase
     /// Gets or sets the identifier of the user who authored this comment.
     /// </summary>
     [Required] 
-    public Guid AuthorUserId { get; init; }
+    public Guid UserId { get; init; }
     
     /// <summary>
     /// The text content of the comment.
