@@ -14,5 +14,5 @@ public interface IReviewStatusService
     /// <param name="targetId">The unique identifier of the content to update.</param>
     /// <param name="statusValue">The integer value representing the new status, cast to <see cref="Anima.Core.Models.ContentBase.ReviewStatusEnum"/>.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the target ID on success, or an error response.</returns>
-    Task<ApiResponseDto<IdentityDto>> SetStatusAsync(Guid projectId, Guid targetId, int statusValue);
+    Task<ApiResponseDto<MetaIdentityResponseDto>> SetStatusAsync(Guid projectId, Guid targetId, int statusValue);
 }

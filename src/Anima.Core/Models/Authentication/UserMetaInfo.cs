@@ -10,5 +10,5 @@ public class UserMetaInfo : BaseMetaInfo
     /// </summary>
     public string? AvatarUrl { get; set; }
 
-    public override  string? TypeHint {get => typeof(User).ToString();set;} 
+    public override  string? TypeHint {get => typeof(User).ToString();init;} 
 }

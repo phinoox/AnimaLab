@@ -18,5 +18,5 @@ public class ProjectSeriesMetaInfo : BaseMetaInfo
     /// </summary>
     public virtual ProjectSeries ProjectSeries { get; set; } = null!;
 
-    public override  string? TypeHint {get => typeof(ProjectSeries).ToString();set;} 
+    public override  string? TypeHint {get => typeof(ProjectSeries).ToString();init;} 
 }

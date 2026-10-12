@@ -5,7 +5,7 @@ namespace Anima.Core.Models.Authentication;
 /// <summary>
 /// Represents a user account within the Anima system.
 /// </summary>
-[ModelDependency(typeof(RootMarker))]
+[ModelDependency(typeof(UserMetaInfo))]
 public class User : MetaEntityBase<UserMetaInfo>
 {
    

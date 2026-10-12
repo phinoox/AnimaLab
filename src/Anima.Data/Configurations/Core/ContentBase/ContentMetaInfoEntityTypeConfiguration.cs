@@ -1,6 +1,7 @@
 using Anima.Core.Models.ContentBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Anima.Data.Configurations.Core.ContentBase;
 
@@ -20,7 +21,8 @@ public class MetaInfoEntityTypeConfiguration : IEntityTypeConfiguration<ContentM
         // Indexes for frequently filtered columns
         builder.HasIndex(e => e.Slug).IsUnique();
         builder.HasIndex(e => e.Status);
-        builder.HasIndex(e => e.ProjectId);
+        builder.HasIndex(e => e.ParentId);
+        builder.HasIndex(e => e.TypeHint); //for searches
         
         // Navigation property: MediaAttachments (SetNull to preserve attachment history)
         builder.HasMany(ci => ci.MediaAttachments)
@@ -30,7 +32,7 @@ public class MetaInfoEntityTypeConfiguration : IEntityTypeConfiguration<ContentM
         
         builder.HasOne(mi => mi.Project)
             .WithMany()
-            .HasForeignKey(mi => mi.ProjectId)
+            .HasForeignKey(mi => mi.ParentId)
             .OnDelete(DeleteBehavior.Cascade); 
         
         // Navigation property: MetaInfoTags (SetNull to preserve tags)
@@ -38,5 +40,10 @@ public class MetaInfoEntityTypeConfiguration : IEntityTypeConfiguration<ContentM
             .WithOne(ct => ct.MetaInfo)
             .HasForeignKey(ct => ct.MetaInfoId)
             .OnDelete(DeleteBehavior.SetNull);
+        
+         builder.HasOne(mi => mi.ReviewStatus)
+            .WithOne()
+            .HasForeignKey<ContentMetaInfo>(m => m.ReviewStatusId)
+            .IsRequired(false); 
     }
 }

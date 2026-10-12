@@ -17,7 +17,7 @@ public interface ICommentService
     /// <param name="text">The text content of the comment.</param>
     /// <param name="userId">The ID of the user posting the comment.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the new comment's ID on success, or an error response.</returns>
-    Task<ApiResponseDto<IdentityDto>> AddCommentAsync(Guid projectId, Guid parentId, Guid targetId, string text, Guid userId);
+    Task<ApiResponseDto<MetaIdentityResponseDto>> AddCommentAsync(Guid projectId, Guid? parentId, Guid targetId, string text, Guid userId);
 
     /// <summary>
     /// Deletes an existing comment.
@@ -25,5 +25,5 @@ public interface ICommentService
     /// <param name="projectId">The ID of the project containing the comment.</param>
     /// <param name="commentId">The unique identifier of the comment to delete.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> indicating success or failure.</returns>
-    Task<ApiResponseDto<IdentityDto>> DeleteCommentAsync(Guid projectId, Guid commentId);
+    Task<ApiResponseDto<MetaIdentityResponseDto>> DeleteCommentAsync(Guid projectId, Guid commentId);
 }

@@ -1,0 +1,84 @@
+namespace Anima.Api.Infrastructure.Commands;
+
+using Anima.Core.Base.Commands;
+using Anima.Core.Base.Interfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
+
+/// <summary>
+/// Provides an abstract base class for all command handlers, managing the transaction lifecycle, 
+/// error handling, and providing access to core domain tools.
+/// </summary>
+public abstract class BaseCommandHandler<TCommand, TResponse> : ICommandHandler<TCommand, TResponse>
+    where TCommand : ICommand
+{
+    protected readonly ILogger _logger;
+    protected readonly DbContext _db;
+    protected readonly ICoreServicesProvider _core;
+
+    protected BaseCommandHandler(ILogger logger, DbContext db, ICoreServicesProvider core)
+    {
+        _logger = logger;
+        _db = db;
+        _core = core;
+    }
+
+    /// <summary>
+    /// The template method that manages the transaction lifecycle. 
+    /// Concrete handlers implement the business logic in ExecuteAsync.
+    /// </summary>
+    public async Task<TResponse> HandleAsync(TCommand command)
+    {
+        IDbContextTransaction? transaction = null;
+
+        try
+        {
+            // Start a new transaction for every command execution
+            transaction = await _db.Database.BeginTransactionAsync();
+
+            // Execute the actual business logic provided by the concrete handler
+            var response = await ExecuteAsync(command);
+
+            // Check if the response indicates failure via the ISuccessfulCommandResponse interface
+            if (response is ISuccessfulCommandResponse successful && !successful.IsSuccessful)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogWarning("Command {CommandName} failed execution logic. Transaction rolled back.", typeof(TCommand).Name);
+            }
+            else
+            {
+                await transaction.CommitAsync();
+            }
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            if (transaction != null)
+                await transaction.RollbackAsync();
+
+            _logger.LogError(ex, "Error executing command {CommandName}. Transaction rolled back.", typeof(TCommand).Name);
+            throw; 
+        }
+        finally
+        {
+            if (transaction != null)
+                await transaction.DisposeAsync();
+        }
+    }
+
+    /// <summary>
+    /// The specialized implementation of the command logic. 
+    /// Must be implemented by concrete handlers.
+    /// </summary>
+    protected abstract Task<TResponse> ExecuteAsync(TCommand command);
+}
+
+/// <summary>
+/// An interface to allow the BaseCommandHandler to check if a response indicates failure.
+/// </summary>
+public interface ISuccessfulCommandResponse
+{
+    bool IsSuccessful { get; }
+}

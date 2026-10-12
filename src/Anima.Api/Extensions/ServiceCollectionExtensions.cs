@@ -1,5 +1,6 @@
 using System.Reflection;
 using Anima.Api.Base;
+using Anima.Api.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Anima.Api.Extensions;

@@ -1,4 +1,5 @@
 using Anima.Api.CoreServices.Interfaces;
+using Anima.Core.Base.MetaBase;
 using Anima.Core.Models.Shared;
 using Anima.Data.Contexts;
 
@@ -48,7 +49,7 @@ public class SlugResolverService : ISlugResolverService
     /// <param name="projectId">The ID of the project providing the scoping context.</param>
     /// <param name="identifier">The string identifier (slug) to resolve.</param>
     /// <returns>A task representing the asynchronous operation, returning the unique ID of the resolved entity if found within the project; otherwise, null.</returns>
-    public async Task<Guid?> ResolveSlugAsync<TMeta>(Guid projectId, string identifier) where TMeta : ProjectEntityMetaInfo
+    public async Task<Guid?> ResolveSlugAsync<TMeta>(Guid projectId, string identifier) where TMeta : ScopedMetaInfo
     {
         if (Guid.TryParse(identifier, out var guid))
         {
@@ -58,7 +59,7 @@ public class SlugResolverService : ISlugResolverService
         var miSet = _db.Set<TMeta>();
         if (miSet == null)
             return null;
-        var projectMetaInfo = miSet.FirstOrDefault(mi => mi.Slug == identifier && mi.ProjectId == projectId);
+        var projectMetaInfo = miSet.FirstOrDefault(mi => mi.Slug == identifier && mi.ParentId == projectId);
         if (projectMetaInfo != null)
         {
             return (Guid?)projectMetaInfo.Id;

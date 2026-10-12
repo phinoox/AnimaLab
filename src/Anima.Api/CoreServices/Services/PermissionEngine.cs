@@ -44,12 +44,12 @@ public class PermissionEngine : IPermissionEngine
             return new AccessResult(AccessResultStatus.NotFound, "Project not found.");
 
         // 2. Determine User's Relationship/Role within the project
-        bool isOwner = project.UserId == userId;
+        bool isOwner = project.MetaInfo.CreatedByUserId == userId;
         var member = await _db.ProjectMembers
             .FirstOrDefaultAsync(pm => pm.ProjectId == projectId && pm.UserId == userId);
 
         // 3. Apply Visibility Rule (The "Who can see a deleted project" rule)
-        if (project.IsDeleted)
+        if (project.MetaInfo.IsDeleted)
         {
             // Only Owners or Admins are allowed to 'see' a deleted project
             bool isAdmin = member != null && member.Role == ProjectMemberRoleEnum.Admin;
@@ -79,7 +79,7 @@ public class PermissionEngine : IPermissionEngine
     public async Task<bool> IsTargetInProjectAsync(Guid projectId, Guid targetId)
     {
          var exists = await _db.Set<ContentMetaInfo>()
-            .AnyAsync(m => m.Id == targetId && m.ProjectId == projectId);
+            .AnyAsync(m => m.Id == targetId && m.ParentId == projectId);
 
         return exists;
     }

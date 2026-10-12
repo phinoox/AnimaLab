@@ -3,6 +3,7 @@
 // =============================================================================
 
 using System.Text.Json.Serialization;
+using Anima.Core.Models.Authentication;
 
 namespace Anima.Core.Base.MetaBase;
 
@@ -28,6 +29,12 @@ public abstract class BaseMetaInfo
     public Guid CreatedByUserId { get; init; }
 
     /// <summary>
+    /// The public profile metadata of the user who created this project.
+    /// </summary>
+    [ForeignKey(nameof(CreatedByUserId))]
+    public virtual UserMetaInfo? UserProfile { get; set; } = null!;
+
+    /// <summary>
     /// Gets or sets the primary display name of the entity.
     /// Updating this property automatically regenerates the associated slug.
     /// </summary>
@@ -37,7 +44,8 @@ public abstract class BaseMetaInfo
         {
             _title = value;
             // Automatically sync the slug whenever the name changes
-            Slug = StringSanitizer.Normalize(_title);
+            if(string.IsNullOrEmpty(Slug))
+                Slug = StringSanitizer.Normalize(_title);
         }
      } 
 
@@ -79,6 +87,6 @@ public abstract class BaseMetaInfo
     /// <summary>
     /// Gets or sets a hint for the entity type, used during polymorphic deserialization or mapping.
     /// </summary>
-    public virtual string? TypeHint {get;set;}
+    public virtual string? TypeHint {get;init;}
 }
 

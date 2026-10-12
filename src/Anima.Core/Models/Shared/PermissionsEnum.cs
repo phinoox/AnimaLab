@@ -14,5 +14,6 @@ public enum PermissionsEnum
     // Specialized permissions (can be expanded by modules)
     CanPublish,
     CanManageTags,
-    CanAssignRole
+    CanAssignRole,
+    Default = 99
 }

@@ -36,10 +36,10 @@ public class TagService : DomainService, ITagService
     /// <param name="targetId">The unique identifier of the content being tagged.</param>
     /// <param name="name">The name of the tag to be applied.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the target ID on success, or an error response.</returns>
-    public async Task<ApiResponseDto<IdentityDto>> AddTagAsync(Guid projectId, Guid targetId, string name)
+    public async Task<ApiResponseDto<MetaIdentityResponseDto>> AddTagAsync(Guid projectId, Guid targetId, string name)
     {
         // 1. Permission Check (Can we edit this project scope?)
-       var authorizationError = await CheckAccessAsync<IdentityDto>(projectId, PermissionsEnum.CanEdit);
+       var authorizationError = await CheckAccessAsync<MetaIdentityResponseDto>(projectId, PermissionsEnum.CanEdit);
         if (authorizationError != null) 
             return authorizationError;
 
@@ -57,13 +57,13 @@ public class TagService : DomainService, ITagService
 
             // 3. Find the target Content Anchor (The Soul of the content)
             var content = await _db.ContentMetaInfos.FindAsync(targetId);
-            if (content == null) return ApiResponseDto<IdentityDto>.NotFound("Target content not found.");
+            if (content == null) return ApiResponseDto<MetaIdentityResponseDto>.NotFound("Target content not found.");
 
             // 4. Check if link already exists to prevent duplicates
             bool alreadyLinked = await _db.Set<ContentTagRelation>()
                 .AnyAsync(r => r.MetaInfoId == targetId && r.TagId == tag.Id);
 
-            if (alreadyLinked) return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=targetId});
+            if (alreadyLinked) return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=targetId});
 
             // 5. Create the Junction Record (The Relationship)
             var relation = new ContentTagRelation
@@ -76,13 +76,13 @@ public class TagService : DomainService, ITagService
             await _db.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=targetId});
+            return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=targetId});
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
             _logger.LogError(ex, "Error adding tag {TagName} to {TargetId}", name, targetId);
-            return ApiResponseDto<IdentityDto>.ServerError("An error occurred while tagging content.");
+            return ApiResponseDto<MetaIdentityResponseDto>.ServerError("An error occurred while tagging content.");
         }
     }
 
@@ -93,10 +93,10 @@ public class TagService : DomainService, ITagService
     /// <param name="targetId">The unique identifier of the content being untagged.</param>
     /// <param name="tagId">The unique identifier of the tag to be removed from the target.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> indicating success or failure.</returns>
-    public async Task<ApiResponseDto<IdentityDto>> RemoveTagAsync(Guid projectId, Guid targetId, Guid tagId)
+    public async Task<ApiResponseDto<MetaIdentityResponseDto>> RemoveTagAsync(Guid projectId, Guid targetId, Guid tagId)
     {
         // 1. Permission Check
-        var authorizationError = await CheckAccessAsync<IdentityDto>(projectId, PermissionsEnum.CanEdit);
+        var authorizationError = await CheckAccessAsync<MetaIdentityResponseDto>(projectId, PermissionsEnum.CanEdit);
         if (authorizationError != null) 
             return authorizationError;
 
@@ -105,17 +105,17 @@ public class TagService : DomainService, ITagService
             var relation = await _db.Set<ContentTagRelation>()
                 .FirstOrDefaultAsync(r => r.MetaInfoId == targetId && r.TagId == tagId);
 
-            if (relation == null) return ApiResponseDto<IdentityDto>.NotFound("Tag relationship not found.");
+            if (relation == null) return ApiResponseDto<MetaIdentityResponseDto>.NotFound("Tag relationship not found.");
 
             _db.Set<ContentTagRelation>().Remove(relation);
             await _db.SaveChangesAsync();
 
-            return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=targetId});
+            return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=targetId});
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error removing tag {TagId} from {TargetId}", tagId, targetId);
-            return ApiResponseDto<IdentityDto>.ServerError("An error occurred while removing the tag.");
+            return ApiResponseDto<MetaIdentityResponseDto>.ServerError("An error occurred while removing the tag.");
         }
     }
 }

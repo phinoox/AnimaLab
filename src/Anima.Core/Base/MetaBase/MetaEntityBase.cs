@@ -11,5 +11,5 @@ public abstract class MetaEntityBase<TMeta> : EntityBase where TMeta : BaseMetaI
     /// Gets or sets the rich metadata associated with this entity.
     /// </summary>
     [ForeignKey("Id")]
-    public virtual TMeta MetaInfo { get; set; } = null!;
+    public virtual TMeta? MetaInfo { get; set; } = null!;
 }

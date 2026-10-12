@@ -1,26 +1,11 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Anima.Api.CoreServices.Interfaces;
 using Anima.Core.Models.Authentication;
 
 namespace Anima.Api.CoreServices.Services;
 
-/// <summary>
-/// Provides reflection-based mapping between DTOs and Entities, 
-/// respecting custom attributes like [ReadOnly], [Sanitize], and [Validate].
-/// </summary>
-public interface IEntityMapper
-{
-    /// <summary>
-    /// Maps non-null properties from the source (DTO) to the target (Entity).
-    /// Respects [ReadOnly], [Sanitize], and [Validate] attributes.
-    /// </summary>
-    /// <typeparam name="TSource">The type of the source DTO.</typeparam>
-    /// <typeparam name="TTarget">The type of the destination Entity.</typeparam>
-    /// <param name="source">The source object containing data.</param>
-    /// <param name="target">The target object to be updated.</param>
-    /// <param name="teamMemberRole">The role of the user performing the operation, used for permission checks via [MinRole].</param>
-    void Map<TSource, TTarget>(TSource source, TTarget target, ProjectMemberRoleEnum teamMemberRole = ProjectMemberRoleEnum.Viewer) where TTarget : class;
-}
 
 /// <summary>
 /// An implementation of <see cref="IEntityMapper"/> that uses reflection to automate the mapping process 
@@ -62,7 +47,7 @@ public class EntityMapper : IEntityMapper
             // Find a matching property on the target entity by name
             var targetProp = targetType.GetProperty(sourceProp.Name, BindingFlags.Public | BindingFlags.Instance);
 
-            if (targetProp != null && targetProp.CanWrite && IsSupportedType(targetProp) && IsInitProperty(targetProp))
+            if (targetProp != null && targetProp.CanWrite && IsSupportedType(targetProp) && !IsInitProperty(targetProp))
             {
                 var minRolePropertyAttribute = targetProp.GetCustomAttribute<MinRoleAttribute>();
                 if (minRolePropertyAttribute != null)
@@ -152,6 +137,10 @@ public class EntityMapper : IEntityMapper
     {
         var setMethod = prop.SetMethod;
         if (setMethod == null) return true; // Getter only
+
+        var modifiers = setMethod.ReturnParameter.GetRequiredCustomModifiers();
+        var isInit = modifiers.Contains(typeof(System.Runtime.CompilerServices.IsExternalInit));
+        return isInit;
 
         // Check if the setter's declaring type is IsExternalInit 
         // or if it belongs to a type that uses init-only properties logic.

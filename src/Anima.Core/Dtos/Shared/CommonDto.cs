@@ -1,50 +1,9 @@
 namespace Anima.Core.Dtos.Shared;
 
-
-/// <summary>
-/// Unified response for successful creation operations, containing navigation identifiers.
-/// </summary>
-public class CreateResponseDto
+public class IdentityDto
 {
-    /// <summary>
-    /// The unique identifier of the newly created entity.
-    /// </summary>
-    [Required, Display(Name = "Entity ID")]
-    public Guid EntityId { get; set; }
-    
-    /// <summary>
-    /// The unique identifier of the associated meta-information record.
-    /// </summary>
-    [Required, Display(Name = "ContentMetaInfo ID")]
-    public Guid MetaInfoId { get; set; }
-    
-    /// <summary>
-    /// The unique identifier of the project this entity belongs to.
-    /// </summary>
-    [Required, Display(Name = "Project ID")]
-    public Guid ProjectId { get; set; }
+    public Guid Id{get;set;}
 }
-
-
-/// <summary>
-/// Unified response for successful delete operations.
-/// </summary>
-public class DeleteResponseDto
-{
-    /// <summary>
-    /// The unique identifier of the deleted entity.
-    /// </summary>
-    [Required, Display(Name = "Entity ID")]
-    public Guid EntityId { get; set; }
-
-    /// <summary>
-    /// The unique identifier of the project the entity belonged to.
-    /// </summary>
-    [Required, Display(Name = "Project ID")]
-    public Guid ProjectId { get; set; }
-}
-
-
 
 /// <summary>
 /// Response data for an automatic save operation.
@@ -62,8 +21,40 @@ public class AutosaveResponseDto
     public int VersionNumber { get; set; }
 }
 
-public class IdentityDto
+/// <summary>
+/// ResponseDto for entities that follow the body-soul pattern with unified id
+/// </summary>
+public class MetaIdentityResponseDto
 {
    public Guid Id {get;set;}
+
+   public string Slug {get;set;}
    
+}
+
+
+/// <summary>
+/// ResponseDto for common,mostly leaf, entities that don't follow the body-sould pattern
+/// </summary>
+public class ScopedIdentityResponseDto
+{
+    /// <summary>
+    /// The unique identifier of the newly created entity.
+    /// </summary>
+    [Required, Display(Name = "Entity ID")]
+    public Guid EntityId { get; set; }
+    
+    /// <summary>
+    /// The unique identifier of the project this entity belongs to.
+    /// </summary>
+    [Required, Display(Name = "Parent ID")]
+    public Guid ParentId { get; set; }
+}
+
+/// <summary>
+/// General dto for commands that only singal if they were successfull
+/// </summary>
+public class SuccessResponseDto
+{
+    public bool Success {get;set;}
 }

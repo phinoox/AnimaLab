@@ -1,3 +1,4 @@
+using Anima.Core.Base.Interfaces;
 using Anima.Core.Models.Authentication;
 
 namespace Anima.Api.Extensions;

@@ -8,13 +8,17 @@ namespace Anima.Core.Models.ContentBase;
 /// Represents a content item (character, world, mechanic, etc.) in the game development system.
 /// </summary>
 [ModelDependency(typeof(Project))]
-public class ContentMetaInfo : ProjectEntityMetaInfo
+public class ContentMetaInfo : ScopedMetaInfo
 {
     // --- Relationships & Domain Data ---
    
-    [ForeignKey("ProjectId")]
-    public virtual Project Project { get; set; } = null!; 
+    [ForeignKey("ParentId")]
+    public virtual ProjectMetaInfo? Project { get; set; } = null!; 
 
+    public Guid? ReviewStatusId{get;set;}
+
+    [ForeignKey("ReviewStatusId")]
+    public virtual ReviewStatus? ReviewStatus { get; set; }
     
     [Required]
     public ContentStatusEnum Status { get; set; } = ContentStatusEnum.Draft;
@@ -36,7 +40,8 @@ public class ContentMetaInfo : ProjectEntityMetaInfo
     public virtual ICollection<ContentVersionLog> VersionLogs { get; set; } = new List<ContentVersionLog>();
     public virtual ICollection<AssetLink> AssetLinks { get; set; } = new List<AssetLink>();
     public virtual ICollection<MediaAttachment> MediaAttachments { get; set; } = new List<MediaAttachment>();
-    public virtual ReviewStatus ReviewStatus { get; set; } = null!; 
+    
+   
 
     public virtual ICollection<Comment> Comments {get;set;} = new List<Comment>();
     public virtual ICollection<ContentTagRelation> MetaInfoTagRelations { get; set; } = new List<ContentTagRelation>();

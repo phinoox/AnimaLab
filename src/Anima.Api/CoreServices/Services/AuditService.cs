@@ -1,4 +1,5 @@
 using Anima.Api.CoreServices.Interfaces;
+using Anima.Core.Base.Interfaces;
 using Anima.Core.Models.Authentication;
 using Anima.Data.Contexts;
 

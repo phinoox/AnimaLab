@@ -14,17 +14,15 @@ public class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
         // We no longer configure Title, Slug, Status, or Visibility here.
 
         // --- Domain Indexes ---
-        builder.HasIndex(e => e.UserId); 
         builder.HasIndex(e => e.ProjectSeriesId);
 
         // --- Relationships ---
+        // Define the 1:1 relationship with MetaInfo using a shared Primary Key
+        builder.HasOne(p => p.MetaInfo) // Assumes MetaEntityBase defines this property
+        .WithOne()
+        .HasForeignKey<ProjectMetaInfo>(m => m.Id);
 
-        // CreatedByUser
-        builder.HasOne(p => p.User)
-            .WithMany()
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+       
         // ProjectSeries
         builder.HasOne(p => p.ProjectSeries)
             .WithMany(ps => ps.Projects)

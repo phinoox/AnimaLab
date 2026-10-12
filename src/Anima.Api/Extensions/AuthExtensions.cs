@@ -16,7 +16,7 @@ public static class AuthExtensions
     /// <param name="configuration">The application configuration containing JWT settings.</param>
     /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the JWT secret is missing or too short (less than 32 bytes).</exception>
-    public static IServiceCollection AddGademaAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSecret = configuration["Jwt:Secret"];
         if (string.IsNullOrWhiteSpace(jwtSecret) || Encoding.UTF8.GetByteCount(jwtSecret) < 32)
@@ -31,12 +31,41 @@ public static class AuthExtensions
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret!)),
-                    ValidateIssuer = true,
-                    ValidIssuer = configuration["Jwt:Issuer"] ?? "GaDeMa",
-                    ValidateAudience = true,
-                    ValidAudience = configuration["Jwt:Audience"] ?? "GademaApi",
+                    ValidateIssuer = false,
+                    ValidIssuer = configuration["Jwt:Issuer"] ?? "AnimaLab",
+                    ValidateAudience = false,
+                    ValidAudience = configuration["Jwt:Audience"] ?? "AnimaApi",
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromSeconds(30),
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        // This will tell you exactly WHY the token was rejected
+                        Console.WriteLine($"[AUTH ERROR] {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine("[AUTH SUCCESS] Token validated successfully.");
+                        return Task.CompletedTask;
+                    },
+                    OnMessageReceived = context =>
+                    {
+                        Console.WriteLine($"[AUTH Message] Received token {context.Request.Query["access_token"]}.");
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine($"[AUTH Challenge] statuscode was {context.Response.StatusCode}.");
+                        return Task.CompletedTask;
+                    },
+                    OnForbidden = context =>
+                    {
+                        Console.WriteLine($"[AUTH Forbidden] statuscode was {context.Response.StatusCode}.");
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

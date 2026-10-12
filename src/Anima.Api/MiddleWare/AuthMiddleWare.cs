@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Anima.Core.Base.Interfaces;
 using Anima.Core.Models.Authentication;
 using Anima.Data.Contexts;
 
@@ -33,6 +34,9 @@ public class AuthMiddleware
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task InvokeAsync(HttpContext context, IUserContext userContext, AppDbContext dbContext)
     {
+         var authHeader = context.Request.Headers["Authorization"].ToString();
+          Console.WriteLine($"[DEBUG] Auth Header: '{authHeader}'");
+
         var claimsPrincipal = context.User;
 
         if (claimsPrincipal != null && claimsPrincipal.Identity?.IsAuthenticated == true)
@@ -55,6 +59,10 @@ public class AuthMiddleware
 
                 _logger.LogDebug("UserContext hydrated for User: {UserId}", userId);
             }
+        }
+         else if (claimsPrincipal != null)
+        {
+            _logger.LogWarning("User identity present but IsAuthenticated is false. Check JWT validation parameters.");
         }
 
         await _next(context);

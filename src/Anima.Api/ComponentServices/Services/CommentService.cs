@@ -38,10 +38,10 @@ public class CommentService : DomainService, ICommentService
     /// <param name="text">The text content of the comment.</param>
     /// <param name="userId">The ID of the user posting the comment.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the new comment's ID on success, or an error response.</returns>
-    public async Task<ApiResponseDto<IdentityDto>> AddCommentAsync(Guid projectId, Guid parentid, Guid targetId, string text, Guid userId)
+    public async Task<ApiResponseDto<MetaIdentityResponseDto>> AddCommentAsync(Guid projectId, Guid? parentid, Guid targetId, string text, Guid userId)
     {
         // 1. Permission Check (Can the user edit this content?)
-        var authorizationError = await CheckAccessAsync<IdentityDto>(projectId, PermissionsEnum.CanEdit);
+        var authorizationError = await CheckAccessAsync<MetaIdentityResponseDto>(projectId, PermissionsEnum.CanEdit);
         if (authorizationError != null) 
             return authorizationError;
 
@@ -52,12 +52,12 @@ public class CommentService : DomainService, ICommentService
                 .Include(c => c.Comments)
                 .FirstOrDefaultAsync(c => c.Id == targetId);
 
-            if (content == null) return ApiResponseDto<IdentityDto>.NotFound("Target content not found.");
+            if (content == null) return ApiResponseDto<MetaIdentityResponseDto>.NotFound("Target content not found.");
 
             // 3. Capability Check: Are comments enabled?
             if (content.CommentSettings == CommentSettingsEnum.Disabled)
             {
-                return ApiResponseDto<IdentityDto>.Forbidden("Comments are disabled for this content.");
+                return ApiResponseDto<MetaIdentityResponseDto>.Forbidden("Comments are disabled for this content.");
             }
 
             // 4. Create the comment
@@ -73,12 +73,12 @@ public class CommentService : DomainService, ICommentService
             _db.Comments.Add(comment);
             await _db.SaveChangesAsync();
 
-            return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=comment.Id});
+            return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=comment.Id});
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error adding comment to {TargetId}", targetId);
-            return ApiResponseDto<IdentityDto>.ServerError("An error occurred while posting a comment.");
+            return ApiResponseDto<MetaIdentityResponseDto>.ServerError("An error occurred while posting a comment.");
         }
     }
 
@@ -88,26 +88,26 @@ public class CommentService : DomainService, ICommentService
     /// <param name="projectId">The ID of the project containing the comment.</param>
     /// <param name="commentId">The unique identifier of the comment to delete.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> indicating success or failure.</returns>
-    public async Task<ApiResponseDto<IdentityDto>> DeleteCommentAsync(Guid projectId, Guid commentId)
+    public async Task<ApiResponseDto<MetaIdentityResponseDto>> DeleteCommentAsync(Guid projectId, Guid commentId)
     {
-        var authorizationError = await CheckAccessAsync<IdentityDto>(projectId, PermissionsEnum.CanEdit);
+        var authorizationError = await CheckAccessAsync<MetaIdentityResponseDto>(projectId, PermissionsEnum.CanEdit);
         if (authorizationError != null) 
             return authorizationError;
 
         try
         {
             var comment = await _db.Comments.FindAsync(commentId);
-            if (comment == null) return ApiResponseDto<IdentityDto>.NotFound("Comment not found.");
+            if (comment == null) return ApiResponseDto<MetaIdentityResponseDto>.NotFound("Comment not found.");
 
             _db.Comments.Remove(comment);
             await _db.SaveChangesAsync();
 
-            return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=commentId});
+            return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=commentId});
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error deleting comment {CommentId}", commentId);
-            return ApiResponseDto<IdentityDto>.ServerError("An error occurred while deleting the comment.");
+            return ApiResponseDto<MetaIdentityResponseDto>.ServerError("An error occurred while deleting the comment.");
         }
     }
 }

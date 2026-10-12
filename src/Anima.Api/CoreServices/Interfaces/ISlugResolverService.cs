@@ -1,3 +1,4 @@
+using Anima.Core.Base.MetaBase;
 using Anima.Core.Models.Shared;
 
 namespace Anima.Api.CoreServices.Interfaces;
@@ -22,5 +23,5 @@ public interface ISlugResolverService
     /// <param name="projectId">The ID of the project providing the scoping context.</param>
     /// <param name="identifier">The string identifier (slug) to resolve.</param>
     /// <returns>A task representing the asynchronous operation, returning the unique ID of the resolved entity if found within the project; otherwise, null.</returns>
-    Task<Guid?> ResolveSlugAsync<TMeta>(Guid projectId, string identifier) where TMeta : ProjectEntityMetaInfo;
+    Task<Guid?> ResolveSlugAsync<TMeta>(Guid projectId, string identifier) where TMeta : ScopedMetaInfo;
 }

@@ -17,12 +17,10 @@ public class ProjectSeriesMetaInfoEntityTypeConfiguration : IEntityTypeConfigura
         // Indexes (Inherited properties from BaseMetaInfo)
         builder.HasIndex(e => e.Slug).IsUnique();
 
-        // Relationship to ProjectSeries (1:1)
-        // Law I: The Body's Id is its FK to the Soul. 
-        // In this case, ProjectSeriesMetaInfo is the "Body" and ProjectSeries is the "Soul".
-        builder.HasOne(mi => mi.ProjectSeries)
-            .WithOne() // No navigation property back from Series in the model (Horizontal expansion uses ParentId/SeriesId usually, but here it's a 1:1 extension)
-            .HasForeignKey<ProjectSeriesMetaInfo>(mi => mi.Id) // Updated: PK/FK Unification
-            .OnDelete(DeleteBehavior.Cascade);
+        // Define the relationship from the Soul (Dependent) to the Body (Principal)
+    builder.HasOne(mi => mi.ProjectSeries) // This links back to the navigation property in MetaInfo
+        .WithOne(ps => ps.MetaInfo)      // This tells EF that ProjectSeries has a 'MetaInfo' property
+        .HasForeignKey<ProjectSeriesMetaInfo>(mi => mi.Id) // The ID is the FK
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

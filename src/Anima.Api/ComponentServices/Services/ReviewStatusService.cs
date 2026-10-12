@@ -36,10 +36,10 @@ public class ReviewStatusService : DomainService, IReviewStatusService
     /// <param name="targetId">The unique identifier of the content to update.</param>
     /// <param name="statusValue">The integer value representing the new status, cast to <see cref="ReviewStatusEnum"/>.</param>
     /// <returns>An <see cref="ApiResponseDto{IdentityDto}"/> containing the target ID on success, or an error response.</returns>
-    public async Task<ApiResponseDto<IdentityDto>> SetStatusAsync(Guid projectId, Guid targetId, int statusValue)
+    public async Task<ApiResponseDto<MetaIdentityResponseDto>> SetStatusAsync(Guid projectId, Guid targetId, int statusValue)
     {
         // 1. Permission Check
-        var authorizationError = await CheckAccessAsync<IdentityDto>(projectId, PermissionsEnum.CanEdit);
+        var authorizationError = await CheckAccessAsync<MetaIdentityResponseDto>(projectId, PermissionsEnum.CanEdit);
         if (authorizationError != null) 
             return authorizationError;
        
@@ -47,7 +47,7 @@ public class ReviewStatusService : DomainService, IReviewStatusService
         {
             // 2. Locate the Target Anchor (Soul)
             var meta = await _db.ContentMetaInfos.FindAsync(targetId);
-            if (meta == null) return ApiResponseDto<IdentityDto>.NotFound("Target content not found.");
+            if (meta == null) return ApiResponseDto<MetaIdentityResponseDto>.NotFound("Target content not found.");
 
             // 3. Perform the update on the component property
             // Casting the int to the enum as requested by the interface
@@ -55,12 +55,12 @@ public class ReviewStatusService : DomainService, IReviewStatusService
 
             await _db.SaveChangesAsync();
 
-            return ApiResponseDto<IdentityDto>.Success(new IdentityDto(){Id=targetId});
+            return ApiResponseDto<MetaIdentityResponseDto>.Success(new MetaIdentityResponseDto(){Id=targetId});
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating review status for {TargetId}", targetId);
-            return ApiResponseDto<IdentityDto>.ServerError("An error occurred during status update.");
+            return ApiResponseDto<MetaIdentityResponseDto>.ServerError("An error occurred during status update.");
         }
     }
 }

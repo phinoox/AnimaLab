@@ -10,14 +10,5 @@ public class ProjectSeriesEntityTypeConfiguration : IEntityTypeConfiguration<Pro
     {
         builder.HasKey(e => e.Id);
 
-        // Note: Title, Slug, and Description are no longer on the ProjectSeries entity itself.
-        // They are now managed by ProjectSeriesMetaInfo.
-
-        // Relationships
-        builder.HasOne(e => e.MetaInfo)
-               .WithOne() 
-               .OnDelete(DeleteBehavior.Cascade);
-
-        // The inverse relationship (Projects -> ProjectSeries) is configured in ProjectEntityTypeConfiguration
     }
 }
