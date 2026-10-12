@@ -1,0 +1,94 @@
+### Variables
+@baseUrl = http://localhost:5000/api/v1
+@email = test@example.com
+@password = Password123!
+@userName = TestUser
+
+### 1. Register User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "userName": "{{userName}}",
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### 2. Sign In
+# Note: Capture the accessToken from this response to use in subsequent requests as {{authToken}}
+# @name signin
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+###
+@authToken = {{signin.response.body.data.accessToken}}
+### 3. Create Project
+# Captures 'slug' from response as {{projectSlug}}
+# @name createProject
+POST {{baseUrl}}/projects/meta
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "My First Project",
+    "slug": "my-project"
+}
+
+###
+@project_id = {{createProject.response.body.data.id}}
+@projectSlug = {{createProject.response.body.data.slug}}
+
+### 4. Get Project
+GET {{baseUrl}}/projects/{{projectSlug}}
+Authorization: Bearer {{authToken}}
+
+### 5. Update Project Body
+# Passing only the updated data in the body
+PUT {{baseUrl}}/projects/{{projectSlug}}/meta
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Updated Project Name2",
+    "ShortDesc": "Updated description content"
+}
+
+### 5.2. Get Project
+GET {{baseUrl}}/projects
+Authorization: Bearer {{authToken}}
+
+
+
+### 6. Create Blog (Scoped to Project)
+# Captures 'slug' from response as {{blogSlug}}
+# @name createBlog
+POST {{baseUrl}}/projects/{{projectSlug}}/blogs/meta
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "My First Blog Post",
+    "slug": "my-blog"
+}
+
+###
+@blogSlug = {{createBlog.response.body.data.slug}}
+
+### 7. Get Blog
+GET {{baseUrl}}/projects/{{projectSlug}}/blogs/{{blogSlug}}
+Authorization: Bearer {{authToken}}
+
+### 8. Update Blog Body
+# Passing only the updated data in the body
+PUT {{baseUrl}}/projects/{{projectSlug}}/blogs/{{blogSlug}}/body
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Updated Blog Title",
+    "content": "The content has been changed."
+}
