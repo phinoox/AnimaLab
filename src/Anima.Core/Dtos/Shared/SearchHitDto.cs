@@ -28,7 +28,9 @@ public class SearchHitDto
     /// <summary>
     /// The parent context ID. Null for root anchors (Projects), or the ProjectId for content entities.
     /// </summary>
-    public Guid? ScopeId { get; set; } 
+    public Guid? ScopeId { get; set; }
+
+    public string? ShortDesc {get;set;}
 
     /// <summary>
     /// The API endpoint used to fetch the full details of this resource.

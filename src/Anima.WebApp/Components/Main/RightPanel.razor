@@ -1,0 +1,28 @@
+<MudStack Style="height:100%;width:100%" Wrap="Wrap.NoWrap" Row="true" Reverse="true">
+    <MudPaper Style="height:100%">
+        <RightMenu OnMenuClicked=@OnNavMenuClicked />
+    </MudPaper>
+    <MudPaper Style="height:100%;width:100%" Class="justify-content-center" >
+        
+        @ContextPanel
+        <DynamicComponent Type="@_componentType" Parameters="@_parameters"/>
+    </MudPaper>
+        
+</MudStack>
+
+@code {
+    [Parameter]
+    public RenderFragment? ContextPanel { get; set; }
+
+    private void OnNavMenuClicked(Type componentType)
+    {
+        _parameters["Title"] = componentType.Name;
+        _componentType = componentType;
+        
+
+    }
+
+    private Type _componentType = typeof(Demo.StoryOutline);
+
+    private Dictionary<string, object> _parameters = new Dictionary<string, object>{{"Title",("StoryOutline")}};
+}

@@ -1,0 +1,22 @@
+﻿@using System.ComponentModel
+<MudNavMenu>
+    <MudNavLink Icon="@Icons.Material.Filled.AccountTree" OnClick="@(() => LoadComponent<Demo.StoryOutline>())" Match="NavLinkMatch.All">Outline</MudNavLink>
+    <MudNavLink Icon="@Icons.Material.Filled.TempleHindu" OnClick="@(() => LoadComponent<Demo.Locations>())" Match="NavLinkMatch.All">Locations</MudNavLink>
+    <MudNavLink Icon="@Icons.Material.Filled.AccountBox" OnClick="@(() => LoadComponent<Demo.Characters>())" Match="NavLinkMatch.All">Characters</MudNavLink>
+    <MudNavLink Icon="@Icons.Material.Filled.LocalLibrary" OnClick="@(() => LoadComponent<Demo.Lore>())"  Match="NavLinkMatch.Prefix">Lore</MudNavLink>
+</MudNavMenu>
+
+@code {
+
+    @code {
+    [Parameter]
+    public EventCallback<Type> OnMenuClicked { get; set; }
+
+    
+}
+
+    public async void LoadComponent<TComponent>() where TComponent : Demo.DemoComponent
+    {
+        await OnMenuClicked.InvokeAsync(typeof(TComponent));
+    }
+}

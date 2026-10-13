@@ -1,0 +1,44 @@
+@page "/explore"
+@using Anima.Core.Dtos.Shared
+@using Anima.WebApp.Components.Search
+
+<MudStack>
+    <MudCard >
+        <MudTextField @bind-Value="_searchText" Label="Search Text" Variant="Variant.Filled"></MudTextField>
+        <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Outlined.Search">Search</MudButton>
+    </MudCard>
+    <MudList @ref="ResultList" T=SearchHitDto>
+       @foreach (var item in _searchHits)
+        {
+            <MudListItem Value="@item">
+                <SearchHit SearchResult=@item/>
+            </MudListItem>
+        }
+    </MudList>
+</MudStack>
+
+@code
+{
+    private string _searchText {get;set;}
+
+    private List<SearchHitDto> _searchHits = new();
+
+   protected override  Task OnInitializedAsync()
+    {
+        
+        
+        _searchHits.Clear();
+
+        for (int i = 0; i < 15; i++)
+        {
+            SearchHitDto hitDto = new(){DisplayName = $"Result-{i}",ShortDesc="this is a search result"};
+            // Create the data object
+            
+            _searchHits.Add(hitDto);
+        }
+        
+        return  base.OnInitializedAsync();
+    }
+
+    public MudList<SearchHitDto> ResultList { get; private set; }
+}

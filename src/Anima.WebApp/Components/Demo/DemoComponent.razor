@@ -1,0 +1,14 @@
+@using MudBlazor
+
+<MudText Color="Color.Primary" Align="Align.Center" Variant="Variant.Filled">@Title</MudText>
+
+@code
+{
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+}

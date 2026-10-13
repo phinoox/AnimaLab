@@ -1,0 +1,35 @@
+@using Anima.Core.Models.Authentication
+@using MudBlazor
+
+<MudMenu StartIcon="@Icons.Material.Outlined.AccountCircle" Color="Color.Primary" Size="Size.Medium" Direction="Direction.Bottom">
+    <ActivatorContent>
+        
+         <div @onclick="@context.ToggleAsync" style="cursor: pointer">
+        @if (UserProfile != null && !string.IsNullOrEmpty(UserProfile.AvatarUrl))
+        {
+        <MudAvatar Color="Color.Primary">
+         <MudImage Src="@UserProfile.AvatarUrl"></MudImage>
+        </MudAvatar>
+        }
+        else
+        {
+          <MudAvatar Color="Color.Primary">
+            <MudIcon Icon="@Icons.Material.Filled.AccountCircle"/>
+          </MudAvatar>
+        }
+        </div>
+    </ActivatorContent>
+    <ChildContent>
+    <MudMenuItem Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Primary" Size="Size.Small"> Profile </MudMenuItem>
+    <MudMenuItem Icon="@Icons.Material.Outlined.Apps" Color="Color.Primary" Size="Size.Small" > Projects </MudMenuItem>
+    <MudMenuItem Icon="@Icons.Material.Outlined.Settings" Color="Color.Primary" Size="Size.Small" > Settings </MudMenuItem>
+    <MudMenuItem Icon="@Icons.Material.Outlined.ExitToApp" Color="Color.Primary" Size="Size.Small" > Signout </MudMenuItem>
+    </ChildContent>
+</MudMenu>
+
+@code {
+    [Parameter] 
+    public EventCallback ToggleAsync { get; set; }
+
+    UserMetaInfo UserProfile {get;set;}
+}

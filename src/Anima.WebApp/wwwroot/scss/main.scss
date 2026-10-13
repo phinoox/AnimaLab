@@ -1,0 +1,8 @@
+@import 'variables';
+
+.mud-drawer--closed{
+ overflow: hidden;
+ .mud-nav-link-text {
+    display: none;
+}
+}

@@ -1,0 +1,11 @@
+@using MudBlazor
+
+<MudBreadcrumbs Items="_items" />
+
+@code {
+    List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", "/"),
+        new BreadcrumbItem("Current Project", "#")
+    };
+}

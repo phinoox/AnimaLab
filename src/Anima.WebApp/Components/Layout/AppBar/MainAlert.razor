@@ -1,0 +1,33 @@
+
+@using Humanizer
+@using MudBlazor
+
+<MudAlert class="@(alertVisible?"":"invisible")" Severity="@Severity" Variant="Variant.Filled">
+    @TimerMessage
+</MudAlert>
+
+@code
+{
+    [Parameter]
+    public Severity Severity {get;set;} = Severity.Normal;
+
+    [Parameter]
+    public bool alertVisible {get;set;}=true;
+
+    [Parameter]
+    public int TimerSeconds {get;set;}= 90;
+
+    private bool Started {get;set;} = false;
+
+    private string TimerMessage {get=>GetTimerMessage();}
+
+    private string GetTimerMessage()
+    {
+        if(TimerSeconds > 60)
+        {
+        var minutes = TimerSeconds /60;
+        return $"{minutes} minutes";
+        }
+        return $"{TimerSeconds} seconds";
+    }
+}

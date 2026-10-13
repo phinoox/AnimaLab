@@ -1,0 +1,11 @@
+@using Anima.Core.Dtos.Shared
+
+ <MudCard>
+    <MudText>Result</MudText>
+    <MudText>@SearchResult.DisplayName</MudText>
+    <MudText>@SearchResult.ShortDesc</MudText>
+ </MudCard>
+@code {
+    [Parameter]
+    public required SearchHitDto SearchResult {get;set;}
+}

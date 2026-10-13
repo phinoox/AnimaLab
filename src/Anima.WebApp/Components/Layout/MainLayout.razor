@@ -1,0 +1,64 @@
+﻿@using Anima.WebApp.Components.Demo
+@using Anima.WebApp.Components.Layout.AppBar
+@using Anima.WebApp.Components.Main
+@using MudBlazor
+@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="true" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<link href="css/main.css" rel="stylesheet" />   
+
+<MudLayout>
+    <MudAppBar >
+        <MudIconButton Icon="@Icons.Material.Filled.Balance" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerLeftToggle())" />
+         <MudText Typo="Typo.h5" Class="ml-3">Anima Lab</MudText>
+         <BreadcrumbComponent/>
+         <MudSpacer />
+         <MainAlert @ref="mainAlert" @rendermode="InteractiveServer" Severity=Severity.Error alertVisible="@_alarmVisible" />
+         <MudToggleIconButton @bind-Toggled="@_alarmVisible"
+                     Icon="@Icons.Material.Filled.AlarmOff" Color="@Color.Error" Title="Off"
+                     ToggledIcon="@Icons.Material.Filled.Alarm" ToggledColor="@Color.Success" ToggledTitle="On"/>
+         <UserMenuComponent />
+    </MudAppBar>
+    <MudDrawer Breakpoint="Breakpoint.Sm" @bind-Open="@_drawerLeftOpen" Overlay="true" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" OpenMiniOnHover="true" Elevation="2">
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudGrid Spacing="6" Justify="Justify.Center" Style="height: 95vh; width: 100%;" Class="align-items-center justify-content-center d-flex justify-centered align-center" >
+        <MudItem xs="9">
+            <MudCard Outlined="true">
+          @Body
+          </MudCard>
+        </MudItem> 
+        </MudGrid>
+     <MudDrawer Breakpoint="Breakpoint.Md"  @bind-Open="@_drawerRightOpen" Variant="@DrawerVariant.Mini" width="40%" OpenMiniOnHover="true" Overlay=true Anchor=Anchor.Right ClipMode="DrawerClipMode.Docked" Elevation="1">
+     <RightPanel >
+        <ContextPanel></ContextPanel>
+     </RightPanel>
+        
+     </MudDrawer>
+    
+    </MudMainContent>
+    <StatusBar/>
+</MudLayout>
+
+@code {
+    bool _drawerLeftOpen = false;
+    bool _drawerRightOpen = false;
+
+    bool _alarmVisible = true;
+
+    MainAlert mainAlert;
+
+    void DrawerLeftToggle()
+    {
+        _drawerLeftOpen = !_drawerLeftOpen;
+    }
+
+    void DrawerRightToggle()
+    {
+        _drawerRightOpen = !_drawerRightOpen;
+    }
+}

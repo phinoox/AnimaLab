@@ -1,0 +1,8 @@
+.mud-drawer--closed {
+  overflow: hidden;
+}
+.mud-drawer--closed .mud-nav-link-text {
+  display: none;
+}
+
+/*# sourceMappingURL=main.css.map */
