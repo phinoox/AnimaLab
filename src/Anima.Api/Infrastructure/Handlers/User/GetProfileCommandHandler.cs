@@ -21,7 +21,7 @@ public class GetProfileCommandHandler : BaseCommandHandler<GetProfileCommand, Us
 
     protected override IdentityRequirementEnum IdentityRequirement => IdentityRequirementEnum.MustBeAuthenticated;
 
-    protected override ScopeRequirementEnum ScopeRequirement => ScopeRequirementEnum.Entity;
+    protected override ScopeRequirementEnum ScopeRequirement => ScopeRequirementEnum.None;
 
     protected override async Task<ApiResponseDto<UserMetaInfo>> ExecuteAsync(GetProfileCommand command,RequestContext context)
     {

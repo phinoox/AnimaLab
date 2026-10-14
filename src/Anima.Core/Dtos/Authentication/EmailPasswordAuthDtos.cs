@@ -13,8 +13,8 @@ public class RegisterDto
     [Required, MinLength(8)]
     public string Password { get; set; } = "";
 
-    [Required]
-    public string UserName { get; set; } = "";
+    
+    public string? UserName { get; set; } = "";
 }
 
 /// <summary>

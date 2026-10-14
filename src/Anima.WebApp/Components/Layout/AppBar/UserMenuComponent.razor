@@ -1,9 +1,13 @@
 @using Anima.Core.Models.Authentication
+@using Anima.WebApp.Services.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
 
 <MudMenu StartIcon="@Icons.Material.Outlined.AccountCircle" Color="Color.Primary" Size="Size.Medium" Direction="Direction.Bottom">
     <ActivatorContent>
-        
          <div @onclick="@context.ToggleAsync" style="cursor: pointer">
         @if (UserProfile != null && !string.IsNullOrEmpty(UserProfile.AvatarUrl))
         {
@@ -20,16 +24,24 @@
         </div>
     </ActivatorContent>
     <ChildContent>
-    <MudMenuItem Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Primary" Size="Size.Small"> Profile </MudMenuItem>
+    <MudMenuItem Href="/user/profile" Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Primary" Size="Size.Small"> Profile </MudMenuItem>
     <MudMenuItem Icon="@Icons.Material.Outlined.Apps" Color="Color.Primary" Size="Size.Small" > Projects </MudMenuItem>
     <MudMenuItem Icon="@Icons.Material.Outlined.Settings" Color="Color.Primary" Size="Size.Small" > Settings </MudMenuItem>
-    <MudMenuItem Icon="@Icons.Material.Outlined.ExitToApp" Color="Color.Primary" Size="Size.Small" > Signout </MudMenuItem>
+    <MudMenuItem OnClick=Logout Icon="@Icons.Material.Outlined.ExitToApp" Color="Color.Primary" Size="Size.Small" > Signout </MudMenuItem>
     </ChildContent>
 </MudMenu>
+   
 
 @code {
-    [Parameter] 
-    public EventCallback ToggleAsync { get; set; }
+  [Parameter] 
+  public EventCallback ToggleAsync { get; set; }
 
-    UserMetaInfo UserProfile {get;set;}
+  UserMetaInfo UserProfile {get;set;}
+
+  private async Task Logout()
+  {
+    await AuthStateProvider.ClearUserAsync();
+
+    Navigation.NavigateTo("/");
+  }
 }

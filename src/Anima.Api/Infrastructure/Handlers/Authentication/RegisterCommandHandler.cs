@@ -38,7 +38,7 @@ public class RegisterCommandHandler : BaseCommandHandler<RegisterCommand, MetaId
         var user = new User
         {
             Id = userId,
-            UserName = registerDto.UserName,
+            UserName = registerDto.UserName ?? registerDto.Email,
             Email = registerDto.Email,
             PasswordHash = PasswordHasher.Hash(registerDto.Password),
             EmailConfirmed = true,
@@ -49,7 +49,7 @@ public class RegisterCommandHandler : BaseCommandHandler<RegisterCommand, MetaId
         {
             Id = userId,
             CreatedByUserId = UserConstants.SystemUserId,
-            Title = registerDto.UserName,
+            Title = user.UserName,
             IsPublic = false,
             CreatedAt = DateTime.UtcNow,
             LastModifiedAt = DateTime.UtcNow

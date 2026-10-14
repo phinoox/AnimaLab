@@ -1,7 +1,7 @@
-    <Anima.WebAppBar Bottom="true" Fixed="true" Elevation="1">
+    <MudAppBar Bottom="true" Fixed="true" Elevation="1">
         <MudSpacer />
         @inject ISnackbar Snackbar
      <MudBadge @onclick="@(() => Snackbar.Add("Simple Snackbar"))"" Content="100" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
         <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
     </MudBadge>
-    </Anima.WebAppBar>
+    </MudAppBar>

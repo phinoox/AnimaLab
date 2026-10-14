@@ -1,10 +1,13 @@
 <MudStack Style="height:100%;width:100%" Wrap="Wrap.NoWrap" Row="true" Reverse="true">
     <MudPaper Style="height:100%">
+        <MudStack>
+        @ToggleButton
         <RightMenu OnMenuClicked=@OnNavMenuClicked />
+        </MudStack>
     </MudPaper>
     <MudPaper Style="height:100%;width:100%" Class="justify-content-center" >
         
-        @ContextPanel
+        
         <DynamicComponent Type="@_componentType" Parameters="@_parameters"/>
     </MudPaper>
         
@@ -12,13 +15,17 @@
 
 @code {
     [Parameter]
-    public RenderFragment? ContextPanel { get; set; }
+    public RenderFragment? ToggleButton { get; set; }
 
-    private void OnNavMenuClicked(Type componentType)
+     [Parameter]
+    public EventCallback OnMenuClicked { get; set; }
+
+
+    private async void OnNavMenuClicked(Type componentType)
     {
         _parameters["Title"] = componentType.Name;
         _componentType = componentType;
-        
+        await OnMenuClicked.InvokeAsync();
 
     }
 

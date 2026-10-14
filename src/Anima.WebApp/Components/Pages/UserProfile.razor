@@ -1,0 +1,96 @@
+@page "/user/profile"
+@using System.Configuration
+@using Anima.Core.Dtos.Shared
+@using Anima.Core.Models.Authentication
+@using Anima.WebApp.Services.Authentication
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@inject AuthService AuthService
+@inject CustomAuthStateProvider AuthStateProvider
+@inject ISnackbar Snackbar
+
+@if (_userProfile != null)
+{
+<MudCard>
+    <MudText>@_userProfile.Title</MudText>
+    <MudText>@_userProfile.Id</MudText>
+    <MudImage Src="@_userProfile.AvatarUrl"/>
+    <MudText>@_userProfile.Slug</MudText>
+    <MudText>@_userProfile.CreatedAt</MudText>
+</MudCard>
+}
+else
+{
+    <MudCard>
+   <MudSkeleton />
+<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="110px" />
+</MudCard>
+}
+
+@if(!string.IsNullOrEmpty(errorMessage))
+{
+    <MudText>ficken</MudText>
+    <MudText>@errorMessage</MudText>
+}
+
+
+@code
+{
+    private UserMetaInfo? _userProfile {get;set;} = null;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        errorMessage = "ficken";
+        await base.OnAfterRenderAsync(firstRender);
+        if(!firstRender)
+            return;
+        errorMessage = "ficken2";
+        await GetUserProfile();
+        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //await OnAfterRenderAsync(true);
+        //GetUserProfile();
+        return;
+    }
+
+    private async Task GetUserProfile()
+    {
+        if(_userProfile !=null)
+            return;
+        try{
+            var response = await AuthService.GetUserProfile();
+            
+            if(response != null)
+            {
+                Snackbar.Add(response.Message);
+                if(response.Successful)
+                {
+                    _userProfile = response.Data ?? null;
+                    errorMessage = "success";
+                }
+                else
+                {
+                    errorMessage = response.Message;
+                }
+            }
+            else
+            {
+                errorMessage = "could not get userprofile";
+            }
+        }
+        catch(Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        StateHasChanged();
+        if(!string.IsNullOrEmpty(errorMessage))
+            Snackbar.Add(errorMessage);
+    }
+
+    public string errorMessage { get; private set; }
+}

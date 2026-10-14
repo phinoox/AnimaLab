@@ -9,8 +9,10 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Blazor.LocalStorage" Version="10.1.0" />
     <PackageReference Include="MudBlazor" Version="9.*" />
     <PackageReference Include="MudBlazor.SassCompiler" Version="2.0.7" />
+    <PackageReference Include="ProtectedBrowserStorage.NETStandard" Version="1.1.2" />
   </ItemGroup>
 
 

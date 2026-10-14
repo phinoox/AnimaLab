@@ -1,0 +1,165 @@
+@using Anima.Core.Dtos.Authentication
+@using Anima.WebApp.Services.Authentication
+@inject AuthService AuthService
+@inject CustomAuthStateProvider AuthStateProvider
+@inject ISnackbar Snackbar
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h5">@(_isRegisterMode ? "Create Account" : "Sign In")</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudStack Spacing="4" Class="mt-4">
+            <MudTextField @bind-Value="_email" 
+                          Label="Email Address" 
+                          Variant="Variant.Outlined" 
+                          InputType="InputType.Email" 
+                          Required="true" />
+
+            <MudTextField @bind-Value="_password" 
+                          Label="Password" 
+                          Variant="Variant.Outlined" 
+                          InputType="InputType.Password" 
+                          Required="true" />
+
+            @if (_isRegisterMode)
+            {
+                <MudTextField @bind-Value="_confirmPassword" 
+                              Label="Confirm Password" 
+                              Variant="Variant.Outlined" 
+                              InputType="InputType.Password" 
+                              Required="true" />
+            }
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Dense="true" Class="mt-2">@_errorMessage</MudAlert>
+            }
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
+        <MudButton Color="Color.Primary" 
+                   OnClick="Submit" 
+                   Variant="Variant.Filled" 
+                   Disabled="@_isProcessing"
+                   StartIcon="@(_isProcessing ? null : (_isRegisterMode ? Icons.Material.Filled.PersonAdd : Icons.Material.Filled.Login))">
+            @if (_isProcessing)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Processing...</MudText>
+            }
+            else
+            {
+                <MudText>@(_isRegisterMode ? "Register" : "Login")</MudText>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public bool IsRegisterMode { get; set; }
+
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private bool _isRegisterMode;
+    private bool _isProcessing;
+    private string _email = "";
+    private string _password = "";
+    private string _confirmPassword = "";
+    private string? _errorMessage;
+
+
+    protected override void OnInitialized()
+    {
+        _isRegisterMode = IsRegisterMode;
+    }
+
+    private async Task Submit()
+    {
+        _errorMessage = null;
+        _isProcessing = true;
+
+        try
+        {
+            if (_isRegisterMode)
+            {
+                if (_password != _confirmPassword)
+                {
+                    _errorMessage = "Passwords do not match.";
+                    return;
+                }
+
+                var regDto = new RegisterDto { Email = _email, Password = _password };
+                Snackbar.Add("trying to register with ");
+                // Note: You'll need to implement Register in your AuthService as well
+                var responseDto = await AuthService.Register(regDto); 
+                bool success = responseDto.Successful;
+
+                if (success)
+                {
+                    Snackbar.Add("Registration successful! Please sign in.", Severity.Success);
+                    ToggleMode(); // Switch to login mode automatically
+                }
+                else
+                {
+                    _errorMessage = $"Registration failed: {responseDto.Message}";
+                }
+            }
+            else
+            {
+                var loginDto = new SignInDto { Email = _email, Password = _password };
+                var result = await AuthService.SignIn(loginDto);
+                if (result != null)
+                {
+                    if(!result.Successful)
+                    {
+                        Snackbar.Add(result.Message,Severity.Error);
+                        return;
+                    }
+                    Snackbar.Add($"login successful!", Severity.Success);
+                    // 1. Tell the provider to set the user (which syncs LocalStorage & Memory Store)
+                    await AuthStateProvider.SetUserAsync(result.Data.AccessToken);
+
+                    // 2. Close the dialog
+                    CloseAsync(DialogResult.Ok(true));
+                }
+                else
+                {
+                     Snackbar.Add("could not log in",Severity.Error);
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "An unexpected error occurred.";
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            _isProcessing = false;
+        }
+    }
+
+    private void ToggleMode()
+    {
+        _isRegisterMode = !_isRegisterMode;
+        _errorMessage = null;
+        _email = "";
+        _password = "";
+        _confirmPassword = "";
+    }
+
+    private void CloseAsync(DialogResult result) 
+    {
+        MudDialog.Close(result);
+    }
+
+     private void Cancel() 
+    {
+        MudDialog.Cancel();
+    }
+}

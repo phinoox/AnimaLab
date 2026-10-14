@@ -1,47 +1,70 @@
-﻿@using Anima.WebApp.Components.Demo
+﻿@using Anima.Core.Dtos.Authentication
+@using Anima.WebApp.Components.Demo
 @using Anima.WebApp.Components.Layout.AppBar
 @using Anima.WebApp.Components.Main
+@using Anima.WebApp.Services.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor
 @inherits LayoutComponentBase
+@inject IDialogService DialogService
+@inject AuthService AuthService
+@inject CustomAuthStateProvider AuthStateProvider
 
 <MudThemeProvider IsDarkMode="true" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-<link href="css/main.css" rel="stylesheet" />   
+<link href="css/main.css" rel="stylesheet" />
+
 
 <MudLayout>
-    <MudAppBar >
-        <MudIconButton Icon="@Icons.Material.Filled.Balance" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerLeftToggle())" />
-         <MudText Typo="Typo.h5" Class="ml-3">Anima Lab</MudText>
-         <BreadcrumbComponent/>
-         <MudSpacer />
-         <MainAlert @ref="mainAlert" @rendermode="InteractiveServer" Severity=Severity.Error alertVisible="@_alarmVisible" />
-         <MudToggleIconButton @bind-Toggled="@_alarmVisible"
-                     Icon="@Icons.Material.Filled.AlarmOff" Color="@Color.Error" Title="Off"
-                     ToggledIcon="@Icons.Material.Filled.Alarm" ToggledColor="@Color.Success" ToggledTitle="On"/>
-         <UserMenuComponent />
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Balance" Color="Color.Inherit" Edge="Edge.Start"
+                       OnClick="@((e) => DrawerLeftToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">Anima Lab</MudText>
+        <BreadcrumbComponent /><button @onclick='() => Console.WriteLine("Hello World")'>Test Interactivity</button>
+        <MudSpacer />
+        <MainAlert @ref="mainAlert"  Severity=Severity.Error
+                   alertVisible="@_alarmVisible" />
+        <MudToggleIconButton @bind-Toggled="@_alarmVisible" Icon="@Icons.Material.Filled.AlarmOff" Color="@Color.Error"
+                             Title="Off" ToggledIcon="@Icons.Material.Filled.Alarm" ToggledColor="@Color.Success" ToggledTitle="On" />
+        <AuthorizeView >
+            <Authorized>
+                <UserMenuComponent />
+            </Authorized>
+            <NotAuthorized>
+            <MudButton Color="Color.Inherit" OnClick="OpenLogin">Login</MudButton>
+            <MudButton Color="Color.Primary" OnClick="OpenRegister">Register</MudButton>
+            </NotAuthorized>
+        </AuthorizeView>
     </MudAppBar>
-    <MudDrawer Breakpoint="Breakpoint.Sm" @bind-Open="@_drawerLeftOpen" Overlay="true" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" OpenMiniOnHover="true" Elevation="2">
-        <NavMenu/>
+    <MudDrawer Breakpoint="Breakpoint.Sm" @bind-Open="@_drawerLeftOpen" Overlay="true" Variant="@DrawerVariant.Mini"
+               ClipMode="DrawerClipMode.Docked" OpenMiniOnHover="true" Elevation="2">
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudGrid Spacing="6" Justify="Justify.Center" Style="height: 95vh; width: 100%;" Class="align-items-center justify-content-center d-flex justify-centered align-center" >
-        <MudItem xs="9">
-            <MudCard Outlined="true">
-          @Body
-          </MudCard>
-        </MudItem> 
+        <MudGrid Spacing="6" Justify="Justify.Center" Style="height: 95vh; width: 100%;"
+                 Class="align-items-center justify-content-center d-flex justify-centered align-center">
+            <MudItem xs="9">
+                <MudCard Outlined="true">
+                    @Body
+                </MudCard>
+            </MudItem>
         </MudGrid>
-     <MudDrawer Breakpoint="Breakpoint.Md"  @bind-Open="@_drawerRightOpen" Variant="@DrawerVariant.Mini" width="40%" OpenMiniOnHover="true" Overlay=true Anchor=Anchor.Right ClipMode="DrawerClipMode.Docked" Elevation="1">
-     <RightPanel >
-        <ContextPanel></ContextPanel>
-     </RightPanel>
+        <MudDrawer Breakpoint="Breakpoint.Md" @bind-Open="@_drawerRightOpen" Variant="@DrawerVariant.Mini" width="45%"
+                   OpenMiniOnHover="false" Overlay=true Anchor=Anchor.Right ClipMode="DrawerClipMode.Docked" Elevation="1">
+            <RightPanel OnMenuClicked="() => _drawerRightOpen = true">
+                <ToggleButton>
+                    <MudToggleIconButton @bind-Toggled="@_drawerRightOpen" Icon="@Icons.Material.Filled.VisibilityOff"
+                                         Color="@Color.Error" Title="Off" ToggledIcon="@Icons.Material.Filled.Visibility"
+                                         ToggledColor="@Color.Success" ToggledTitle="On" />
+                </ToggleButton>
+            </RightPanel>
         
-     </MudDrawer>
+        </MudDrawer>
     
     </MudMainContent>
-    <StatusBar/>
+    <StatusBar />
 </MudLayout>
 
 @code {
@@ -61,4 +84,42 @@
     {
         _drawerRightOpen = !_drawerRightOpen;
     }
+
+    private async Task OpenLogin()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = await DialogService.ShowAsync<AuthDialog>("Sign In", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            // The user successfully logged in
+        }
+    }
+
+    private async Task OpenRegister()
+    {
+        var parameters = new DialogParameters<AuthDialog> { { x => x.IsRegisterMode, true } };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.ExtraSmall };
+        var dialog = await DialogService.ShowAsync<AuthDialog>("Create Account", parameters, options);
+        await dialog.Result;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This is the single point of entry for syncing Browser -> Server
+            await AuthStateProvider.InitializeAsync();
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //await AuthStateProvider.InitializeAsync();
+        
+    }  
+
 }
