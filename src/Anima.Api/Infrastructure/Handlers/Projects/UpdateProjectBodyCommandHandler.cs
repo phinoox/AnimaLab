@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class UpdateProjectBodyCommandHandler : BaseCommandHandler<UpdateProjectBodyCommand, SuccessResponseDto>
+public class UpdateProjectBodyCommandHandler : WriteCommandHandler<UpdateProjectBodyCommand, SuccessResponseDto>
 {
     
 

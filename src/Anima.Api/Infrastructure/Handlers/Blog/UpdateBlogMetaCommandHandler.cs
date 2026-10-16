@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class UpdateBlogMetaCommandHandler : BaseCommandHandler<UpdateBlogMetaCommand, SuccessResponseDto>
+public class UpdateBlogMetaCommandHandler : WriteCommandHandler<UpdateBlogMetaCommand, SuccessResponseDto>
 {
 
     public UpdateBlogMetaCommandHandler(ILogger<UpdateBlogMetaCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

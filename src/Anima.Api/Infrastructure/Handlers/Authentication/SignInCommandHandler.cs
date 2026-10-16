@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class SignInCommandHandler : BaseCommandHandler<SignInCommand, AuthResponseDto>
+public class SignInCommandHandler : WriteCommandHandler<SignInCommand, AuthResponseDto>
 {
     private readonly JwtTokenService _jwtService;
 

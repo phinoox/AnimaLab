@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Anima.Api.Infrastructure.Handlers.Projects;
 
-public class GetProjectListCommandHandler : BaseCommandHandler<GetProjectListCommand, IEnumerable<ProjectMetaInfo>>
+public class GetProjectListCommandHandler : ReadCommandHandler<GetProjectListCommand, IEnumerable<ProjectMetaInfo>>
 {
     public GetProjectListCommandHandler(ILogger<GetProjectListCommand> logger, AppDbContext db, ICoreServicesProvider core) 
         : base(logger, db, core) { }

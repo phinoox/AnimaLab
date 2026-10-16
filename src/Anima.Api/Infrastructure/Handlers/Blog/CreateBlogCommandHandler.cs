@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class CreateBlogCommandHandler : BaseCommandHandler<CreateBlogCommand, MetaIdentityResponseDto>
+public class CreateBlogCommandHandler : WriteCommandHandler<CreateBlogCommand, MetaIdentityResponseDto>
 {
 
     public CreateBlogCommandHandler(ILogger<CreateBlogCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

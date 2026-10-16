@@ -9,7 +9,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class DeleteBlogCommandHandler : BaseCommandHandler<DeleteBlogCommand, SuccessResponseDto>
+public class DeleteBlogCommandHandler : WriteCommandHandler<DeleteBlogCommand, SuccessResponseDto>
 {
     
 

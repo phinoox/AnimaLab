@@ -7,7 +7,7 @@ using Anima.Data.Contexts;
 
 namespace Anima.Api.Infrastructure.Handlers.Blog;
 
-public class GetBlogCommandHandler : BaseCommandHandler<GetBlogCommand, ContentMetaInfo>
+public class GetBlogCommandHandler : ReadCommandHandler<GetBlogCommand, ContentMetaInfo>
 {
     public GetBlogCommandHandler(ILogger<GetBlogCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 
         : base(logger, db, core) { }

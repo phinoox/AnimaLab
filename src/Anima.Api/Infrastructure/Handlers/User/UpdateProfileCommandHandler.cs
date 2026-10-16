@@ -8,7 +8,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class UpdateProfileCommandHandler : BaseCommandHandler<UpdateProfileCommand, SuccessResponseDto>
+public class UpdateProfileCommandHandler : WriteCommandHandler<UpdateProfileCommand, SuccessResponseDto>
 {
 
     public UpdateProfileCommandHandler(ILogger<UpdateProfileCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

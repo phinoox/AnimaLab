@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class RegisterCommandHandler : BaseCommandHandler<RegisterCommand, MetaIdentityResponseDto>
+public class RegisterCommandHandler : WriteCommandHandler<RegisterCommand, MetaIdentityResponseDto>
 {
 
     public RegisterCommandHandler(ILogger<RegisterCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

@@ -7,7 +7,7 @@ using Anima.Data.Contexts;
 
 namespace Anima.Api.Infrastructure.Handlers.Projects;
 
-public class GetProjectCommandHandler : BaseCommandHandler<GetProjectCommand, ProjectMetaInfo>
+public class GetProjectCommandHandler : ReadCommandHandler<GetProjectCommand, ProjectMetaInfo>
 {
     public GetProjectCommandHandler(ILogger<GetProjectCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 
         : base(logger, db, core) { }

@@ -8,7 +8,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class GetProfileCommandHandler : BaseCommandHandler<GetProfileCommand, UserMetaInfo>
+public class GetProfileCommandHandler : ReadCommandHandler<GetProfileCommand, UserMetaInfo>
 {
 
     public GetProfileCommandHandler(ILogger<GetProfileCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class DeleteProjectCommandHandler : BaseCommandHandler<DeleteProjectCommand, SuccessResponseDto>
+public class DeleteProjectCommandHandler : WriteCommandHandler<DeleteProjectCommand, SuccessResponseDto>
 {
 
     public DeleteProjectCommandHandler(ILogger<DeleteProjectCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 

@@ -10,7 +10,7 @@ using Anima.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class CreateProjectCommandHandler : BaseCommandHandler<CreateProjectCommand, MetaIdentityResponseDto>
+public class CreateProjectCommandHandler : WriteCommandHandler<CreateProjectCommand, MetaIdentityResponseDto>
 {
     
     public CreateProjectCommandHandler(ILogger<CreateProjectCommandHandler> logger, AppDbContext db, ICoreServicesProvider core) 
