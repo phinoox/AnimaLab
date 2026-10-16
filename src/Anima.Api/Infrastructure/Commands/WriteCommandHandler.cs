@@ -36,8 +36,9 @@ public abstract class WriteCommandHandler<TCommand, TResponse> : BaseCommandHand
             }
             else
             {
+               await LogActivityAsync(command, context);
                 await transaction.CommitAsync();
-                await LogActivityAsync(command, context);
+               
             }
 
             return response;

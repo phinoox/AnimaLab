@@ -30,18 +30,25 @@ public class SignInCommandHandler : WriteCommandHandler<SignInCommand, AuthRespo
     protected override async Task<ApiResponseDto<AuthResponseDto>> ExecuteAsync(SignInCommand command,RequestContext context)
     {
         var signInDto = command.Data;
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == signInDto.Email);
+        var user = await _db.Users
+                                .Include(u => u.MetaInfo)
+                                .FirstOrDefaultAsync(u => u.Email == signInDto.Email);
 
         if (user == null || !PasswordHasher.Verify(signInDto.Password, user.PasswordHash))
             return ApiResponseDto<AuthResponseDto>.Unauthorized("Invalid email or password.");
 
         // Fetch meta info to get the name/title for the token payload
-        var meta = await _db.UserMetaInfos.FindAsync(user.Id);
+        var meta = user.MetaInfo;
         var userName = meta?.Title ?? user.UserName;
 
         var expiryDate = DateTime.UtcNow.AddHours(24);
         var accessToken = _jwtService.IssueAccessToken(user.Id, user.Email, userName, "email_password");
 
+        user.LastLogin = DateTime.Now;
+        _db.Users.Update(user);
+        await _db.SaveChangesAsync();
+
+       
         return ApiResponseDto<AuthResponseDto>.Success(new AuthResponseDto
         {
             AccessToken = accessToken,
