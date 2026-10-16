@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Anima.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261012193448_InitialCreate")]
+    [Migration("20261016222004_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -279,9 +279,6 @@ namespace Anima.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("ParentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProjectId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("References")
@@ -642,28 +639,24 @@ namespace Anima.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1024)
+                    b.Property<Guid?>("EntityId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("RelatedEntityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RelatedEntityType")
+                    b.Property<string>("EntityType")
                         .IsRequired()
                         .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ProjectId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("ActivityLogs");
                 });
@@ -916,7 +909,7 @@ namespace Anima.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Anima.Core.Models.Projects.Project", "Project")
+                    b.HasOne("Anima.Core.Models.Projects.ProjectMetaInfo", "Project")
                         .WithMany()
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1013,17 +1006,6 @@ namespace Anima.Data.Migrations
                     b.Navigation("ProjectSeries");
 
                     b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("Anima.Core.Models.Shared.ActivityLog", b =>
-                {
-                    b.HasOne("Anima.Core.Models.Projects.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Anima.Core.Models.Tagging.ContentTagRelation", b =>

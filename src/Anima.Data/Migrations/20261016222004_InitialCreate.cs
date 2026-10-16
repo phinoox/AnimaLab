@@ -12,6 +12,24 @@ namespace Anima.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ActivityLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Action = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    EntityType = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
+                    EntityId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MetaTags",
                 columns: table => new
                 {
@@ -133,30 +151,6 @@ namespace Anima.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActivityLogs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Action = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
-                    RelatedEntityType = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
-                    RelatedEntityId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivityLogs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ActivityLogs_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProjectMembers",
                 columns: table => new
                 {
@@ -202,52 +196,6 @@ namespace Anima.Data.Migrations
                         name: "FK_ProjectTokens_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContentMetaInfos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReviewStatusId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    ViewMode = table.Column<int>(type: "INTEGER", nullable: false),
-                    Version = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderIndex = table.Column<int>(type: "INTEGER", nullable: false),
-                    CommentSettings = table.Column<int>(type: "INTEGER", nullable: false),
-                    References = table.Column<string>(type: "TEXT", maxLength: 4096, nullable: true),
-                    ProjectId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CreatedByUserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    slug = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LastModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ShortDesc = table.Column<string>(type: "TEXT", maxLength: 4096, nullable: true),
-                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TagIds = table.Column<string>(type: "TEXT", nullable: false),
-                    TypeHint = table.Column<string>(type: "TEXT", nullable: true),
-                    ParentId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentMetaInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContentMetaInfos_Projects_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ContentMetaInfos_ReviewStatus_ReviewStatusId",
-                        column: x => x.ReviewStatusId,
-                        principalTable: "ReviewStatus",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ContentMetaInfos_UserMetaInfos_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "UserMetaInfos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -321,6 +269,75 @@ namespace Anima.Data.Migrations
                         name: "FK_ProjectSeriesMetaInfos_UserMetaInfos_CreatedByUserId",
                         column: x => x.CreatedByUserId,
                         principalTable: "UserMetaInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContentMetaInfos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ReviewStatusId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    ViewMode = table.Column<int>(type: "INTEGER", nullable: false),
+                    Version = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderIndex = table.Column<int>(type: "INTEGER", nullable: false),
+                    CommentSettings = table.Column<int>(type: "INTEGER", nullable: false),
+                    References = table.Column<string>(type: "TEXT", maxLength: 4096, nullable: true),
+                    CreatedByUserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    slug = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LastModifiedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ShortDesc = table.Column<string>(type: "TEXT", maxLength: 4096, nullable: true),
+                    IsPublic = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TagIds = table.Column<string>(type: "TEXT", nullable: false),
+                    TypeHint = table.Column<string>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContentMetaInfos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContentMetaInfos_ProjectMetaInfos_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "ProjectMetaInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContentMetaInfos_ReviewStatus_ReviewStatusId",
+                        column: x => x.ReviewStatusId,
+                        principalTable: "ReviewStatus",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ContentMetaInfos_UserMetaInfos_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "UserMetaInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProjectTagRelations",
+                columns: table => new
+                {
+                    MetaInfoId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectTagRelations", x => new { x.MetaInfoId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_ProjectTagRelations_MetaTags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "MetaTags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProjectTagRelations_ProjectMetaInfos_MetaInfoId",
+                        column: x => x.MetaInfoId,
+                        principalTable: "ProjectMetaInfos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -482,30 +499,6 @@ namespace Anima.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectTagRelations",
-                columns: table => new
-                {
-                    MetaInfoId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectTagRelations", x => new { x.MetaInfoId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_ProjectTagRelations_MetaTags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "MetaTags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectTagRelations_ProjectMetaInfos_MetaInfoId",
-                        column: x => x.MetaInfoId,
-                        principalTable: "ProjectMetaInfos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ExternalReferences",
                 columns: table => new
                 {
@@ -544,11 +537,6 @@ namespace Anima.Data.Migrations
                 table: "UserMetaInfos",
                 columns: new[] { "Id", "AvatarUrl", "CreatedAt", "CreatedByUserId", "IsPublic", "LastModifiedAt", "ShortDesc", "slug", "TagIds", "Title", "TypeHint" },
                 values: new object[] { new Guid("00000000-0000-0000-0000-000000000001"), "/images/system-avatar.png", new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("00000000-0000-0000-0000-000000000001"), false, new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), null, "", "[]", "", null });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityLogs_ProjectId",
-                table: "ActivityLogs",
-                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_AuthorUserId",
@@ -801,16 +789,16 @@ namespace Anima.Data.Migrations
                 name: "MetaTags");
 
             migrationBuilder.DropTable(
-                name: "ProjectMetaInfos");
-
-            migrationBuilder.DropTable(
                 name: "ContentMetaInfos");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "ProjectMetaInfos");
 
             migrationBuilder.DropTable(
                 name: "ReviewStatus");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "UserMetaInfos");
