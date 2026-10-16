@@ -29,15 +29,11 @@ public abstract class DomainService
     /// <summary>
     /// Logs a database-level activity using the core audit service.
     /// </summary>
-    /// <param name="projectId">The ID of the project associated with the action.</param>
-    /// <param name="action">A description of the action performed.</param>
-    /// <param name="relatedEntityType">The type of entity being acted upon.</param>
-    /// <param name="relatedEntityId">The unique identifier of the related entity.</param>
-    /// <param name="description">Additional context for the audit log.</param>
+    /// <param name="activityLog"></param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    protected async Task LogDbAsync(Guid projectId, string action, string relatedEntityType, Guid relatedEntityId, string description)
+    protected async Task LogDbAsync(ActivityLog activityLog)
     {
-        await _core.AuditService.LogDbAsync(projectId, action, relatedEntityType, relatedEntityId, description);
+        await _core.AuditService.LogDbAsync(activityLog);
     }
 
     /// <summary>

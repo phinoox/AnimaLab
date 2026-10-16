@@ -41,13 +41,36 @@ public class AuditService : IAuditService
             ProjectId = actualProjectId,
             UserId = actualUser,
             Action = action,
-            RelatedEntityType = relatedEntityType,
-            RelatedEntityId = relatedEntityId,
-            Description = description,
+            EntityType = relatedEntityType,
+            EntityId = relatedEntityId,
             CreatedAt = DateTime.UtcNow
         };
 
         _db.ActivityLogs.Add(log);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task LogDbAsync(Guid? EntityId, Guid? projectId, Guid? parentId,Guid? userId, string action, string EntityType)
+    {
+       var log = new ActivityLog
+        {
+            ProjectId = projectId,
+            UserId = userId,
+            Action = action,
+            EntityType = EntityType,
+            EntityId = EntityId,
+            CreatedAt = DateTime.UtcNow
+        };
+        await LogDbAsync(activityLog:log);
+    }
+
+    public async Task LogDbAsync(ActivityLog activityLog)
+    {
+        if(activityLog.UserId == null)
+        {
+            activityLog.UserId = _userContext.CurrentUser?.Id ?? UserConstants.SystemUserId;
+        }
+        _db.ActivityLogs.Add(activityLog);
         await _db.SaveChangesAsync();
     }
 }

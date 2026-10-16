@@ -14,5 +14,7 @@ public interface IAuditService
     /// <param name="relatedEntityId">The unique identifier of the related entity, if applicable.</param>
     /// <param name="description">A human-readable description providing additional context for the event.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task LogDbAsync(Guid? projectId, string action, string relatedEntityType, Guid? relatedEntityId = null, string? description = null);
+    Task LogDbAsync( Guid? EntityId ,Guid? projectId,Guid? parentId,Guid? userId, string action, string EntityType);
+
+    Task LogDbAsync(ActivityLog activityLog);
 }
