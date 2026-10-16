@@ -92,3 +92,26 @@ Content-Type: application/json
     "title": "Updated Blog Title",
     "content": "The content has been changed."
 }
+
+### 9. SEARCH TESTS (Unified Search API)
+
+### 9.1 Global Search 
+# Searches across all providers (Projects, BlogPosts, etc.) using the current project context
+GET {{baseUrl}}/search?query=my&projectId={{project_id}}
+Authorization: Bearer {{authToken}}
+
+### 9.2 Type-Specific Search: Projects
+# Filters results to only include entities where SearchType is "Project"
+GET {{baseUrl}}/search?query=my&type=Project&projectId={{project_id}}
+Authorization: Bearer {{authToken}}
+
+### 9.3 Type-Specific Search: BlogPosts
+# Filters results to only include entities where SearchType is "BlogPost"
+# Note: This will find the blog post created in step 6
+GET {{baseUrl}}/search?query=first&type=BlogPost&projectId={{project_id}}
+Authorization: Bearer {{authToken}}
+
+### 9.4 Paged Search Test
+# Tests pagination logic (Page 1, 2 results per page)
+GET {{baseUrl}}/search?query=my&page=1&pageSize=2&projectId={{project_id}}
+Authorization: Bearer {{authToken}}

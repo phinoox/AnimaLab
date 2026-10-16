@@ -1,8 +1,11 @@
+using Anima.Api.ComponentServices.Interfaces;
+using Anima.Api.ComponentServices.Services;
 using Anima.Api.CoreServices;
 using Anima.Api.CoreServices.Interfaces;
 using Anima.Api.CoreServices.Services;
 using Anima.Api.Extensions;
 using Anima.Api.Infrastructure.Commands;
+using Anima.Api.Infrastructure.Providers;
 using Anima.Api.MiddleWare;
 using Anima.Api.Utils;
 using Anima.Core.Base.Commands;
@@ -37,6 +40,10 @@ public partial class Program
         builder.Services.AddScoped<IEntityMapper,EntityMapper>();
         builder.Services.AddScoped<ISlugResolverService,SlugResolverService>();
         
+        // 3b. Search Providers
+        builder.Services.AddSearchProviders(typeof(Program).Assembly);
+        builder.Services.AddScoped<SearchOrchestrator>();
+
         // 4. Identity & Security
         builder.Services.AddSingleton<JwtTokenService>();
         //builder.Services.AddScoped<IIdentitySyncStrategy, UserIdentityStrategy>();
@@ -45,7 +52,7 @@ public partial class Program
         RegisterHandlers(builder.Services);
 
         // 6. Command Bus Registration
-        builder.Services.AddScoped<ICommandBus, CommandBus>();
+        builder.Services.AddScoped<IApiCommandBus, ApiCommandBus>();
         builder.Services.AddJwtAuthentication(builder.Configuration);
 
         // 7. OpenAPI Configuration
@@ -83,12 +90,12 @@ public partial class Program
         var assembly = typeof(Program).Assembly;
         var handlerTypes = assembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(i => 
-                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<,>)));
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IApiCommandHandler<,>)));
 
         foreach (var handlerType in handlerTypes)
         {
             var interfaceType = handlerType.GetInterfaces().First(i => 
-                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<,>));
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IApiCommandHandler<,>));
             
             services.AddScoped(interfaceType, handlerType);
         }

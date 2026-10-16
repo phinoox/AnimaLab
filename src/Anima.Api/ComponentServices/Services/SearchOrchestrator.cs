@@ -8,7 +8,7 @@ using Anima.Core.Dtos.Shared;
 
 namespace Anima.Api.ComponentServices.Services;
 
-internal class SearchOrchestrator
+public class SearchOrchestrator
 {
     private readonly IEnumerable<ISearchableProvider> _providers;
     private readonly ILogger<SearchOrchestrator> _logger;
@@ -19,13 +19,19 @@ internal class SearchOrchestrator
         _logger = logger;
     }
 
-    public async Task<ListResponseDto<SearchHitDto>> GlobalSearchAsync(string query, Guid? projectId, int page, int pageSize)
+    public async Task<ListResponseDto<SearchHitDto>> GlobalSearchAsync(SearchRequestDto request)
     {
         try
         {
             var allHits = new List<SearchHitDto>();
 
-            var tasks = _providers.Select(p => p.GetMatchesAsync(query, projectId));
+            // 1. Filter providers by type if a specific type is requested
+            var activeProviders = string.IsNullOrWhiteSpace(request.Type)
+                ? _providers
+                : _providers.Where(p => p.SearchType.Equals(request.Type, StringComparison.OrdinalIgnoreCase));
+
+            // 2. Gather results from selected providers in parallel
+            var tasks = activeProviders.Select(p => p.GetMatchesAsync(request.Query, request.ProjectId));
             var results = await Task.WhenAll(tasks);
 
             foreach (var hitList in results)
@@ -35,8 +41,8 @@ internal class SearchOrchestrator
 
             int totalCount = allHits.Count;
             var pagedResults = allHits
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
                 .ToList();
 
             return new ListResponseDto<SearchHitDto>
