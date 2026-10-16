@@ -11,7 +11,7 @@ using Anima.Api.CoreServices.Interfaces;
 [Route("api/v1/projects")]
 public class ProjectController : BaseController
 {
-    public ProjectController(ISlugResolverService slug, ICommandBus bus) : base(slug, bus) { }
+    public ProjectController(ISlugResolverService slug, IApiCommandBus bus) : base(slug, bus) { }
 
     [HttpPost("meta")]
     public async Task<IActionResult> CreateMeta([FromBody] ProjectMetaInfo meta)

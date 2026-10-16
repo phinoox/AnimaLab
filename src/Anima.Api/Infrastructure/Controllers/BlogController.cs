@@ -12,7 +12,7 @@ using Anima.Api.CoreServices.Interfaces;
 [Route("api/v1/projects/{projectSlug}/blogs")]
 public class BlogController : BaseController
 {
-    public BlogController(ISlugResolverService slug, ICommandBus bus) : base(slug, bus) { }
+    public BlogController(ISlugResolverService slug, IApiCommandBus bus) : base(slug, bus) { }
 
     [HttpPost("meta")]
     public async Task<IActionResult> CreateMeta([FromRoute] string projectSlug, [FromBody] ContentMetaInfo meta)

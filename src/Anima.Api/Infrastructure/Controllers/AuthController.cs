@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly ICommandBus _commandBus;
+    private readonly IApiCommandBus _commandBus;
 
-    public AuthController(ICommandBus commandBus)
+    public AuthController(IApiCommandBus commandBus)
     {
         _commandBus = commandBus;
     }

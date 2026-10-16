@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/v1/users")]
 public class UserController : ControllerBase
 {
-    private readonly ICommandBus _commandBus;
+    private readonly IApiCommandBus _commandBus;
 
-    public UserController(ICommandBus commandBus)
+    public UserController(IApiCommandBus commandBus)
     {
         _commandBus = commandBus;
     }

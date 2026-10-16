@@ -13,9 +13,9 @@ using Anima.Core.Base.MetaBase;
 public abstract class BaseController : ControllerBase
 {
     protected readonly ISlugResolverService _slugResolver;
-    protected readonly ICommandBus _commandBus;
+    protected readonly IApiCommandBus _commandBus;
 
-    protected BaseController(ISlugResolverService slugResolver, ICommandBus commandBus)
+    protected BaseController(ISlugResolverService slugResolver, IApiCommandBus commandBus)
     {
         _slugResolver = slugResolver;
         _commandBus = commandBus;
