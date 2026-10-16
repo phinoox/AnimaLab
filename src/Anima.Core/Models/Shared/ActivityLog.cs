@@ -13,22 +13,16 @@ public class ActivityLog  : EntityBase
     /// <summary>
     /// Gets or sets the identifier of the project associated with this activity.
     /// </summary>
-   [Required] 
-    public Guid ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
-    /// <summary>
-    /// Gets or sets the associated project entity.
-    /// </summary>
-    // Necessary for EF Core to perform Cascade Delete
-    [ForeignKey("ProjectId")]
-    public virtual Project Project { get; set; } = null!;
-
+   public Guid? ParentId { get; set; }
+    
     /// <summary>
     /// Gets or sets the identifier of the user who performed this action.
     /// </summary>
     // Who did it
     [Required]
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     /// <summary>
     /// Gets or sets the action performed (e.g., "Created", "Updated", "Deleted", "Revoked").
@@ -42,22 +36,18 @@ public class ActivityLog  : EntityBase
     /// </summary>
     // The type of entity involved (e.g., "Character", "DialogueBranch", "Token")
     [Required, MaxLength(64)]
-    public string RelatedEntityType { get; set; } = "";
+    public string EntityType { get; set; } = "";
 
     /// <summary>
     /// Gets or sets the identifier of the specific object being acted upon.
     /// </summary>
     // The ID of the specific object being acted upon
-    public Guid? RelatedEntityId { get; set; }
+    public Guid? EntityId { get; set; }
 
-    /// <summary>
-    /// Gets or sets a detailed description of the the activity.
-    /// </summary>
-    [MaxLength(1024)]
-    public string Description { get; set; } = "";
-
+    
     /// <summary>
     /// Gets or sets the timestamp when this activity occurred.
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
 }
