@@ -8,8 +8,8 @@ using Anima.Core.Dtos.Shared;
 /// </summary>
 /// <typeparam name="TCommand">The type of the command to handle.</typeparam>
 /// <typeparam name="TResponse">The type of the response produced by the handler.</typeparam>
-public interface ICommandHandler<in TCommand, TResponse> 
-    where TCommand : ICommand
+public interface IApiCommandHandler<in TCommand, TResponse> 
+    where TCommand : IApiCommand
     where TResponse : class
 {
     /// <summary>

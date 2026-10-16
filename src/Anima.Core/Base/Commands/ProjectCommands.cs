@@ -3,10 +3,10 @@ namespace Anima.Core.Base.Commands;
 using Anima.Core.Base.Commands;
 using Anima.Core.Models.Projects;
 
-public record CreateProjectCommand(ProjectMetaInfo Meta) : ICommand;
+public record CreateProjectCommand(ProjectMetaInfo Meta) : IApiCommand;
 
-public record GetProjectCommand() : ICommand;
-public record GetProjectListCommand() : ICommand;
-public record UpdateProjectBodyCommand(Project Data) : ICommand;
-public record UpdateProjectMetaCommand(ProjectMetaInfo Meta) : ICommand;
-public record DeleteProjectCommand() : ICommand;
+public record GetProjectCommand() : IApiCommand;
+public record GetProjectListCommand() : IApiCommand;
+public record UpdateProjectBodyCommand(Project Data) : IApiCommand;
+public record UpdateProjectMetaCommand(ProjectMetaInfo Meta) : IApiCommand;
+public record DeleteProjectCommand() : IApiCommand;

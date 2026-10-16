@@ -7,6 +7,6 @@ namespace Anima.Core.Base.Commands;
 /// A marker interface for all commands in the system. 
 /// Commands represent an "Intent" to change the state of the system.
 /// </summary>
-public interface ICommand
+public interface IApiCommand
 {
 }

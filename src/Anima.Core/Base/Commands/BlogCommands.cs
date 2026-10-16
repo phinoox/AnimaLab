@@ -4,9 +4,9 @@ using Anima.Core.Base.Commands;
 using Anima.Core.Models.Blog;
 using Anima.Core.Models.ContentBase;
 
-public record CreateBlogCommand(ContentMetaInfo Meta) : ICommand;
+public record CreateBlogCommand(ContentMetaInfo Meta) : IApiCommand;
 
-public record GetBlogCommand() : ICommand;
-public record UpdateBlogBodyCommand(BlogPost Data) : ICommand;
-public record UpdateBlogMetaCommand(ContentMetaInfo Meta) : ICommand;
-public record DeleteBlogCommand() : ICommand;
+public record GetBlogCommand() : IApiCommand;
+public record UpdateBlogBodyCommand(BlogPost Data) : IApiCommand;
+public record UpdateBlogMetaCommand(ContentMetaInfo Meta) : IApiCommand;
+public record DeleteBlogCommand() : IApiCommand;

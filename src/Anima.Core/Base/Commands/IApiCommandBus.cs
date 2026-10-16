@@ -5,7 +5,7 @@ namespace Anima.Core.Base.Commands;
 /// <summary>
 /// Defines the contract for a mediator that routes commands to their appropriate handlers.
 /// </summary>
-public interface ICommandBus
+public interface IApiCommandBus
 {
     /// <summary>
     /// Dispatches a command to its registered handler.
@@ -15,5 +15,5 @@ public interface ICommandBus
     /// <param name="command">The command instance to execute.</param>
     /// <param name="context"></param>
     /// <returns>A task representing the asynchronous operation, returning the handler's response.</returns>
-    Task<ApiResponseDto<TResponse>> SendAsync<TResponse>(ICommand command,RequestContext context) where TResponse : class;
+    Task<ApiResponseDto<TResponse>> SendAsync<TResponse>(IApiCommand command,RequestContext context) where TResponse : class;
 }
